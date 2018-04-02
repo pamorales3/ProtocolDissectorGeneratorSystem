@@ -2,7 +2,7 @@ import Tkinter as tk
 import tkFileDialog
 import AppKit
 
-class App(tk.Frame):
+class open_pcap_window(tk.Frame):
     
     def __init__(self,master):
         tk.Frame.__init__(self,master)
@@ -59,6 +59,6 @@ class App(tk.Frame):
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = App(root)
+    app = open_pcap_window(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()

@@ -1,7 +1,7 @@
 import Tkinter as tk
 import AppKit
 
-class App(tk.Frame):
+class organzie_views_window(tk.Frame):
     def __init__(self,master):
 
         tk.Frame.__init__(self,master)
@@ -40,9 +40,10 @@ class App(tk.Frame):
                   command=self.project_nav_clicked)
         project_nav_hide.grid(row=1,column=1,sticky='w', padx=(20,10))
 
-        project_nav_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_1, value=2,
+        self.project_nav_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_1, value=2,
                   command=self.project_nav_clicked)
-        project_nav_show.grid(row=1,column=2,sticky='w', padx=(20,10))
+        self.project_nav_show.grid(row=1,column=2,sticky='w', padx=(20,10))
+        self.project_nav_show.select() # Turns on the project navigation show radio button
 
         # Dissector Building Area
         self.var_2 = tk.IntVar()
@@ -54,9 +55,10 @@ class App(tk.Frame):
                     command=self.dissector_building_clicked)
         dissector_building_hide.grid(row=2,column=1,sticky='w', padx=(20,10))
 
-        dissector_building_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_2, value=2,
+        self.dissector_building_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_2, value=2,
                     command=self.dissector_building_clicked)
-        dissector_building_show.grid(row=2,column=2,sticky='w', padx=(20,10))
+        self.dissector_building_show.grid(row=2,column=2,sticky='w', padx=(20,10))
+        self.dissector_building_show.select() # Turns on the dissector building show radio button
 
         # Palette 
         self.var_3 = tk.IntVar()
@@ -68,9 +70,10 @@ class App(tk.Frame):
                     command=self.palette_clicked)
         palette_hide.grid(row=3,column=1,sticky='w', padx=(20,10))
 
-        palette_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_3, value=2,
+        self.palette_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_3, value=2,
                     command=self.palette_clicked)
-        palette_show.grid(row=3,column=2,sticky='w', padx=(20,10))
+        self.palette_show.grid(row=3,column=2,sticky='w', padx=(20,10))
+        self.palette_show.select() # Turns on the palette show radio button
 
         # Packet Stream Area
         self.var_4 = tk.IntVar()
@@ -82,9 +85,10 @@ class App(tk.Frame):
                     command=self.packet_stream_clicked)
         packet_stream_hide.grid(row=4,column=1,sticky='w', padx=(20,10))
 
-        packet_stream_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_4, value=2,
+        self.packet_stream_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_4, value=2,
                     command=self.packet_stream_clicked)
-        packet_stream_show.grid(row=4,column=2,sticky='w', padx=(20,10))
+        self.packet_stream_show.grid(row=4,column=2,sticky='w', padx=(20,10))
+        self.packet_stream_show.select() # Turns on the packet stream show radio button
 
         # Dissected Stream Area
         self.var_5 = tk.IntVar()
@@ -96,9 +100,10 @@ class App(tk.Frame):
                     command=self.dissected_stream_clicked)
         dissected_stream_hide.grid(row=5,column=1,sticky='w', padx=(20,10))
 
-        dissected_stream_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_5, value=2,
+        self.dissected_stream_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_5, value=2,
                     command=self.dissected_stream_clicked)
-        dissected_stream_show.grid(row=5,column=2,sticky='w', padx=(20,10))
+        self.dissected_stream_show.grid(row=5,column=2,sticky='w', padx=(20,10))
+        self.dissected_stream_show.select() # Turns on the dissected stream show radio button
 
         # Raw Data Area
         self.var_6 = tk.IntVar()
@@ -110,9 +115,10 @@ class App(tk.Frame):
                     command=self.raw_data_clicked)
         raw_data_hide.grid(row=6,column=1,sticky='w', padx=(20,10))
 
-        raw_data_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_6, value=2,
+        self.raw_data_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_6, value=2,
                     command=self.raw_data_clicked)
-        raw_data_show.grid(row=6,column=2,sticky='w', padx=(20,10))
+        self.raw_data_show.grid(row=6,column=2,sticky='w', padx=(20,10))
+        self.raw_data_show.select() # Turns on the raw data show radio button 
 
         # Console Area
         self.var_7 = tk.IntVar()
@@ -124,10 +130,10 @@ class App(tk.Frame):
                     command=self.console_area_clicked)
         console_hide.grid(row=7,column=1,sticky='w', padx=(20,10))
 
-        console_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_7, value=2,
+        self.console_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_7, value=2,
                     command=self.console_area_clicked)
-        console_show.select()
-        console_show.grid(row=7,column=2,sticky='w', padx=(20,10))
+        self.console_show.grid(row=7,column=2,sticky='w', padx=(20,10))
+        self.console_show.select()  # Turns on the console show radio button
 
 
         # Frame to hold buttons
@@ -145,7 +151,14 @@ class App(tk.Frame):
 
     def default_clicked(self,event=None):
         print('Default was clicked!')
-        self.master.destroy()
+        self.project_nav_show.select()
+        self.dissector_building_show.select()
+        self.palette_show.select()
+        self.packet_stream_show.select()
+        self.dissected_stream_show.select()
+        self.raw_data_show.select()
+        self.console_show.select()
+        
 
     def confirm_clicked(self,event=None):
         print('Confirm was clicked!')
@@ -194,6 +207,6 @@ class App(tk.Frame):
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = App(root)
+    app = organzie_views_window(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()

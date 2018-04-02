@@ -3,7 +3,7 @@ import ttk
 import tkFileDialog
 #import AppKit
 
-class App(tk.Frame):
+class dissector_script_window(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         self.pack()
@@ -82,6 +82,6 @@ if __name__ == '__main__':
     #info = AppKit.NSBundle.mainBundle().infoDictionary()
     #info['LSUIElement']=True
     root = tk.Tk()
-    app=App(root)
+    app = dissector_script_window(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()

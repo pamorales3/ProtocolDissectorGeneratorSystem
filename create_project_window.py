@@ -1,7 +1,7 @@
 import Tkinter as tk
 #import AppKit
 
-class App(tk.Frame):  # Frame is a type of container for Tkinter
+class create_project_window(tk.Frame):  # Frame is a type of container for Tkinter
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         self.pack()
@@ -45,16 +45,16 @@ class App(tk.Frame):  # Frame is a type of container for Tkinter
         import_button.pack(side='right')
 
     def create_clicked(self,event=None):
-        print('Import was clicked!')
+        print('Create was clicked!')
         self.master.destroy()
 
     def cancel_clicked(self, event=None):
-        print('Create was clicked!')
+        print('Cancel was clicked!')
         self.master.destroy()
 
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = App(root)
+    app = create_project_window(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()

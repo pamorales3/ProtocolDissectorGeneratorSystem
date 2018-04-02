@@ -2,7 +2,7 @@ import Tkinter as tk
 import tkFileDialog
 import AppKit
 
-class App(tk.Frame):
+class project_export_window(tk.Frame):
 
     def __init__(self,master):
         tk.Frame.__init__(self,master)
@@ -72,6 +72,6 @@ class App(tk.Frame):
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = App(root)
+    app = project_export_window(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()

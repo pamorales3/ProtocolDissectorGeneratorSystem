@@ -1,7 +1,8 @@
 import Tkinter as tk
+import tkFileDialog
 #import AppKit
 
-class App(tk.Frame):  # Frame is a type of container for Tkinter
+class workspace_launcher(tk.Frame):  # Frame is a type of container for Tkinter
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         self.pack()
@@ -29,7 +30,7 @@ class App(tk.Frame):  # Frame is a type of container for Tkinter
         project_name_entry = tk.Entry(dialog_frame,background="white",width=24)
         project_name_entry.grid(row=0,column=1,sticky='w')
 
-        browse_button = tk.Button(dialog_frame, text="Browse")
+        browse_button = tk.Button(dialog_frame, text="Browse", command=self.directory_picker)
         browse_button.grid(row=0,column=2,sticky='w')
 
         # Frame for Create and Cancel Buttons
@@ -46,9 +47,9 @@ class App(tk.Frame):  # Frame is a type of container for Tkinter
         print('Launch was clicked!')
         self.master.destroy()
 
-    def browse_clicked(self,event=None):
-        print('Browse was clicked!')
-        self.master.destroy()
+    def directory_picker(self):
+        self.selected_directory = tkFileDialog.askdirectory(parent=self,initialdir = "/",title = "Select directory")
+        print("You selected directory: " + self.selected_directory)
 
     def cancel_clicked(self, event=None):
         print('Cancel was clicked!')
@@ -57,6 +58,6 @@ class App(tk.Frame):  # Frame is a type of container for Tkinter
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = App(root)
+    app = workspace_launcher(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()

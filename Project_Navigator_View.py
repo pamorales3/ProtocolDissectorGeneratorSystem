@@ -1,44 +1,48 @@
 import Tkinter as tk
+import ttk
 # Tutorial Video Link - https://www.youtube.com/watch?v=Wb1YFgHqUZ8
-class App(tk.Frame):
+class Project_Navigator_View(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         self.pack()
-        self.master.title("Project Navigator")
-        self.master.resizable(True,True)
-        self.master.tk_setPalette('#ececec')
+        #self.master.title("Project Navigator")
+        #self.master.resizable(True,True)
+        #self.master.tk_setPalette('#ececec')
 
-        x = (self.master.winfo_screenwidth() - self.master.winfo_reqwidth())/2
-        y = (self.master.winfo_screenheight() - self.master.winfo_reqheight())/3
+        # Create Treeview 
+        self.tree = ttk.Treeview(self, selectmode='none', height=7)
+        self.tree.grid(row=0, column=0, sticky='nsew')
+        self.tree.bind("<Double-1>", self.OnDoubleClick)
 
-        #center the frame on the screen
-        self.master.geometry("+{}+{}".format(x,y))
+        # Setup column heading   #0  is 0 column
+        self.tree.heading('#0', text='Workspace X', anchor='center')
 
-        self.master.config(menu=tk.Menu(self))
+        # Insert image to #0 
+        self.img_1 = tk.PhotoImage(file="open_folder_icon.gif") #change to your file path
+        self.img_1 = self.img_1.subsample(10,10)
 
+        self.img_2 = tk.PhotoImage(file="close_folder_icon.gif")
+        self.img_2 = self.img_2.subsample(40,40)
 
-        # Workspace
-        workspace = tk.Message(self, text="Workspace X", font="System 14", justify='left',aspect=800).grid(row=0, columnspan=2)
+        projA = self.tree.insert('', 'end', text="Project A", image=self.img_1)
+        self.tree.insert(projA, 'end', text="Dissector A")
 
-        # Project A
-        img1 = tk.PhotoImage(file="open_folder_icon.gif")
-        img1.zoom(10,10)
-        project1 = tk.Label(self, text="Project A", image=img1, compound="left")
-        project1.photo = img1
-        project1.grid(row=1, columnspan=2)
+        projB = self.tree.insert('', 'end', text="Project B", image=self.img_1)
+        self.tree.insert(projB, 'end', text="Dissector B")
 
+        projC = self.tree.insert('', 'end', text="Project C", image=self.img_2)
+        self.tree.insert(projC, 'end', text="Dissector C")
 
-        # Project B
-'''        img2 = tk.PhotoImage(file="close_folder_icon.gif")
-        img2.subsample(10, 10)
-        project2 = tk.Label(self, text="Project B", image=img2, compound="left")
-        project2.photo = img2
-        project2.grid(row=1, columnspan=2)
-        '''
+    def change_image(self):
+        return tk.PhotoImage(file="open_folder_icon.gif")
 
+    def OnDoubleClick(self, event):
+        item = self.tree.identify('item',event.x,event.y)
+        print("you clicked on", self.tree.item(item,"text"))
 
 
 if __name__ == '__main__':
     root = tk.Tk()
-    app = App(root)
+    app = Project_Navigator_View(root)
     app.mainloop()
+
