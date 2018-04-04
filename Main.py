@@ -1,5 +1,6 @@
 import Tkinter as tk
 import ttk
+import tkMessageBox
 import create_project_window as cP
 import workspace_launcher as wL
 import project_import_window as piw
@@ -17,6 +18,7 @@ class Main(tk.Frame):
         self.master.title("")
         self.master.resizable(True,True)
         self.master.tk_setPalette('#ececec')
+        self.master.protocol("WM_DELETE_WINDOW", self.callback)
 
         x = (self.master.winfo_screenwidth() - self.master.winfo_reqwidth())/2
         y = (self.master.winfo_screenheight() - self.master.winfo_reqheight())/3
@@ -80,8 +82,23 @@ class Main(tk.Frame):
         main_area_frame = tk.Frame(self)
         main_area_frame.pack(padx=20,pady=15,anchor='w')
 
-        r = tk.Tk()
         app = pnv.Project_Navigator_View(main_area_frame)
+
+        main_area_frame.update()
+        print("Main Frame X Size " , main_area_frame.winfo_width())
+        print("Main Frame Y Size " , main_area_frame.winfo_height())
+
+    def callback(self):
+        if tkMessageBox.askokcancel("Quit", "Do you really wish to quit?"):
+            self.master.destroy()
+
+    def StartMove(self, event):
+        self.x = event.x
+        self.y = event.y
+
+    def StopMove(self, event):
+        self.x = None
+        self.y = None
         #app.mainloop
         
 
@@ -105,7 +122,6 @@ class Main(tk.Frame):
         progress_step = float(100.0/len(saveBar))
         for s in saveBar:
             popup.update()
-            #sleep(5) # lauch task
             progress += progress_step
             progress_var.set(progress)
 
@@ -156,7 +172,13 @@ class Main(tk.Frame):
 
     
 if __name__ == '__main__':
-    root = tk.Tk()
+    root = tk.Tk()         
     app = Main(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()
+
+'''
+You have one main frame (the one you want to put stuff in)
+
+Then in the little frames (the ones you want to put on the main frame) you pass main frame as a parameter
+'''

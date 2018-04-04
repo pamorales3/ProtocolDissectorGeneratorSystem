@@ -1,31 +1,42 @@
 import Tkinter as tk
-import ttk
-from time import sleep
+import tkFileDialog 
 
-teams = range(100)
+class App(tk.Tk):
+    def __init__(self):
+        tk.Tk.__init__(self)
+        self.floater = FloatingWindow(self)
 
-def button_command():
-    #start progress bar
-    popup = tk.Toplevel()
-    tk.Label(popup, text="Files being downloaded").grid(row=0,column=0)
+class FloatingWindow(tk.Toplevel):
+    def __init__(self, *args, **kwargs):
+        tk.Toplevel.__init__(self, *args, **kwargs)
+        self.overrideredirect(True)
 
-    progress = 0
-    progress_var = tk.DoubleVar()
-    progress_bar = ttk.Progressbar(popup, variable=progress_var, maximum=100)
-    progress_bar.grid(row=1, column=0)#.pack(fill=tk.X, expand=1, side=tk.BOTTOM)
-    popup.pack_slaves()
+        self.label = tk.Label(self, text="Click on the grip to move")
+        self.grip = tk.Label(self, bitmap="gray25")
+        self.grip.pack(side="left", fill="y")
+        self.label.pack(side="right", fill="both", expand=True)
 
-    progress_step = float(100.0/len(teams))
-    for team in teams:
-        popup.update()
-        #sleep(5) # lauch task
-        progress += progress_step
-        progress_var.set(progress)
+        self.grip.bind("<ButtonPress-1>", self.StartMove)
+        self.grip.bind("<ButtonRelease-1>", self.StopMove)
+        self.grip.bind("<B1-Motion>", self.OnMotion)
 
-    return 0
+    def StartMove(self, event):
+        self.x = event.x
+        self.y = event.y
 
-root = tk.Tk()
+    def StopMove(self, event):
+        self.x = None
+        self.y = None
 
-tk.Button(root, text="Launch", command=button_command).pack()
+    def OnMotion(self, event):
+        deltax = event.x - self.x
+        deltay = event.y - self.y
+        x = self.winfo_x() + deltax
+        y = self.winfo_y() + deltay
+        self.geometry("+%s+%s" % (x, y))
 
-root.mainloop()
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = App()
+    app.mainloop()

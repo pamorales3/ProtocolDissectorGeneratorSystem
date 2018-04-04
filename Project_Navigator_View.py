@@ -9,9 +9,34 @@ class Project_Navigator_View(tk.Frame):
         #self.master.resizable(True,True)
         #self.master.tk_setPalette('#ececec')
 
+
+        button_frame = tk.Frame(self)
+        button_frame.pack(padx=0,pady=0,anchor='w',expand=True)
+
+        self.title = tk.Label(button_frame, text="Project Navigator", font='System 14 bold')
+        self.title.pack(side='left')
+
+        self.title.bind("<ButtonPress-1>", self.StartMove)
+        self.title.bind("<ButtonRelease-1>", self.StopMove)
+        self.title.bind("<B1-Motion>", self.OnMotion)
+
+        minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked)
+        minimize.pack(side='left')
+
+        maximize = tk.Button(button_frame, text="[]")
+        maximize.pack(side='left')
+
+        close = tk.Button(button_frame, text="X", command=self.close_button_clicked)
+        close.pack(side='left')
+
+        tree_frame = tk.Frame(self)
+        tree_frame.pack(padx=0,pady=0,anchor='w',expand=True,fill='both')
+
+
         # Create Treeview 
-        self.tree = ttk.Treeview(self, selectmode='none', height=7)
-        self.tree.grid(row=0, column=0, sticky='nsew')
+        self.tree = ttk.Treeview(tree_frame, selectmode='none', height=7)
+        #self.tree.grid(row=1, column=0, columnspan=4, sticky='nsew')
+        self.tree.pack(side='right',fill='both',expand=True)
         self.tree.bind("<Double-1>", self.OnDoubleClick)
 
         # Setup column heading   #0  is 0 column
@@ -33,12 +58,41 @@ class Project_Navigator_View(tk.Frame):
         projC = self.tree.insert('', 'end', text="Project C", image=self.img_2)
         self.tree.insert(projC, 'end', text="Dissector C")
 
-    def change_image(self):
-        return tk.PhotoImage(file="open_folder_icon.gif")
+    def StartMove(self, event):
+        self.x = event.x
+        self.y = event.y
+        print("Start X Position ", self.x)
+        print("Start Y Position ", self.y)
+
+    def StopMove(self, event):
+        self.x = event.x
+        self.y = event.y
+        print("End X Position ", self.x)
+        print("End Y Position ", self.y)
+
+    def OnMotion(self, event):
+        deltax = event.x - self.x
+        deltay = event.y - self.y
+        x = self.winfo_x() + deltax
+        y = self.winfo_y() + deltay
+        #self.geometry("+%s+%s" % (x, y))
+        if (x > x/3):
+            self.master.place(x=x)
+            self.master.place(y=y)
+            self.master.update()
+        else:
+            self.master.pack(side='left')
+
 
     def OnDoubleClick(self, event):
         item = self.tree.identify('item',event.x,event.y)
         print("you clicked on", self.tree.item(item,"text"))
+
+    def close_button_clicked(self,event=None):
+        self.pack_forget()
+
+    def minimize_button_clicked(self, event=None):
+        self.master.iconify()
 
 
 if __name__ == '__main__':
