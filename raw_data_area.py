@@ -3,9 +3,9 @@ import Tkinter as tk
 class RawData(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        self.master.title('Raw Data Area')
+        #self.master.title('Raw Data Area')
         self.pack(fill='both',expand=True)
-        self.master.minsize(800,200)
+        #self.master.minsize(800,200)
 
         #tk.Label(self, text="This is a listbox").pack()
 
