@@ -4,9 +4,7 @@ import ttk
 class PacketStreamArea(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self, master)
-        #self.master.title('Packet Stream Area')
-        #self.master.minsize(1100,200)
-        treeview = ttk.Treeview(self.master)
+        treeview = ttk.Treeview(self)
         treeview.pack(fill='both',expand=True)
 
         # List of tuples for each packet stream, containing the number, time, source, destination, protocol, and info

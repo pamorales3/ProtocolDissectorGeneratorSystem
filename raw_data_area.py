@@ -3,11 +3,7 @@ import Tkinter as tk
 class RawData(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        #self.master.title('Raw Data Area')
         self.pack(fill='both',expand=True)
-        #self.master.minsize(800,200)
-
-        #tk.Label(self, text="This is a listbox").pack()
 
         packet_data = ["0000   00 1c 26 26 66 a2 00 0e  8e 04 d0 9e 08 00 45 00    ..&&f... ......E.",
                       '0010   00 99 00 00 40 00 40 11  b8 e6 c0 a8 00 01 c0 a8    ....@.@. ........',
@@ -23,8 +19,6 @@ class RawData(tk.Frame):
 
 
 if __name__ == '__main__':
-    #info = AppKit.NSBundle.mainBundle().infoDictionary()
-    #info['LSUIElement']=True
     root = tk.Tk()
     app=RawData(root)
     app.mainloop()

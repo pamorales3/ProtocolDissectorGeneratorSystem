@@ -1,15 +1,10 @@
 import Tkinter as tk
-import ttk
 import AppKit
 
 class ConsoleApp(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        #self.master.title('Console Area')
         self.pack(fill='both',expand=True)
-        #self.master.minsize(800,200)
-
-        #tk.Label(self, text="This is a listbox").pack()
 
         error_list = ['No error message to show.']
 
@@ -21,7 +16,6 @@ class ConsoleApp(tk.Frame):
 
 
 if __name__ == '__main__':
-    #info = AppKit.NSBundle.mainBundle().infoDictionary()
     root = tk.Tk()
     app=ConsoleApp(root)
     AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
