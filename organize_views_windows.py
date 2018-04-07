@@ -1,5 +1,6 @@
 import Tkinter as tk
 import AppKit
+import Project_Navigator_View as pnv
 
 class organzie_views_window(tk.Frame):
     def __init__(self,master):
@@ -149,6 +150,7 @@ class organzie_views_window(tk.Frame):
         default_button = tk.Button(button_frame, text="Restore to Default", command=self.default_clicked)
         default_button.pack(side='right')
 
+
     def default_clicked(self,event=None):
         print('Default was clicked!')
         self.project_nav_show.select()
@@ -158,7 +160,6 @@ class organzie_views_window(tk.Frame):
         self.dissected_stream_show.select()
         self.raw_data_show.select()
         self.console_show.select()
-        
 
     def confirm_clicked(self,event=None):
         print('Confirm was clicked!')
@@ -203,7 +204,6 @@ class organzie_views_window(tk.Frame):
         selection = "You selected the option" + str(self.var_7.get())
         print(selection)
         
-
 
 if __name__ == '__main__':
     root = tk.Tk()

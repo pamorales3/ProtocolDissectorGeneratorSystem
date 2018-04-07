@@ -13,20 +13,20 @@ class Project_Navigator_View(tk.Frame):
         button_frame = tk.Frame(self)
         button_frame.pack(padx=0,pady=0,anchor='w',expand=True)
 
-        self.title = tk.Label(button_frame, text="Project Navigator", font='System 14 bold')
+        self.title = tk.Label(button_frame, text="Project Navigator", font='System 14 bold', background='lightblue')
         self.title.pack(side='left')
 
         self.title.bind("<ButtonPress-1>", self.StartMove)
         self.title.bind("<ButtonRelease-1>", self.StopMove)
         self.title.bind("<B1-Motion>", self.OnMotion)
 
-        minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked)
+        minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
         minimize.pack(side='left')
 
-        maximize = tk.Button(button_frame, text="[]")
+        maximize = tk.Button(button_frame, text="[ ]",bg='lightblue')
         maximize.pack(side='left')
 
-        close = tk.Button(button_frame, text="X", command=self.close_button_clicked)
+        close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
         close.pack(side='left')
 
         tree_frame = tk.Frame(self)
@@ -76,13 +76,14 @@ class Project_Navigator_View(tk.Frame):
         x = self.winfo_x() + deltax
         y = self.winfo_y() + deltay
         #self.geometry("+%s+%s" % (x, y))
-        if (x > x/3):
+        if (x > 0 and y > 0):
             self.master.place(x=x)
             self.master.place(y=y)
             self.master.update()
-        else:
-            self.master.pack(side='left')
 
+
+    def show_project_nav(self):
+        self.pack(side='left')
 
     def OnDoubleClick(self, event):
         item = self.tree.identify('item',event.x,event.y)
@@ -99,4 +100,3 @@ if __name__ == '__main__':
     root = tk.Tk()
     app = Project_Navigator_View(root)
     app.mainloop()
-

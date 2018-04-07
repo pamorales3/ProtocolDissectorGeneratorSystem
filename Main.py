@@ -9,7 +9,8 @@ import dissector_script_window as dsw
 import organize_views_windows as ovw
 import open_pcap_window as opw
 import Project_Navigator_View as pnv
-
+import output_views as ov
+import dissector_builder_area as dba
 class Main(tk.Frame):
     
     def __init__(self,master):
@@ -22,6 +23,7 @@ class Main(tk.Frame):
 
         x = (self.master.winfo_screenwidth() - self.master.winfo_reqwidth())/2
         y = (self.master.winfo_screenheight() - self.master.winfo_reqheight())/3
+
         #center the frame on the screen
         self.master.geometry("+{}+{}".format(x,y))
 
@@ -29,12 +31,11 @@ class Main(tk.Frame):
 
         window_title = tk.Message(self, text="Protocol Dissector Generator System", font=("System 14 bold", 20), justify='left',aspect=1000)
         window_title.config(foreground="orange")
-        window_title.pack(pady=(15,0))
+        window_title.pack(pady=(5,0))
 
         # Menu Section Frame
-        menu_section_frame = tk.Frame(self)
-        menu_section_frame.pack(padx=20,pady=15,anchor='w')
-
+        menu_section_frame = tk.Frame(self,relief='raised', borderwidth=10)
+        menu_section_frame.pack(padx=5,pady=5,anchor='w',expand=True)
 
         '''
         ////////////////////////////////////////////////////////////////////////////////////
@@ -79,14 +80,25 @@ class Main(tk.Frame):
         openPCAPButton.pack(side='left')
 
         # Main Area Frame
-        main_area_frame = tk.Frame(self)
-        main_area_frame.pack(padx=20,pady=15,anchor='w')
+        self.main_area_frame = tk.Frame(self,relief='raised', borderwidth=5)
+        self.main_area_frame.pack(padx=5,pady=5,anchor='w')
 
-        app = pnv.Project_Navigator_View(main_area_frame)
+        self.project_nav = pnv.Project_Navigator_View(self.main_area_frame)
+        self.project_nav.pack(side='left')
 
-        main_area_frame.update()
-        print("Main Frame X Size " , main_area_frame.winfo_width())
-        print("Main Frame Y Size " , main_area_frame.winfo_height())
+        self.dissector_builder = dba.dissector_builder_area(self.main_area_frame)
+        self.dissector_builder.pack(side='right')
+
+        self.views_frame = tk.Frame(self,relief='raised', borderwidth=1)
+        self.views_frame.pack(padx=5,pady=5,anchor='s')
+
+        self.views = ov.OutputView(self.views_frame)
+        self.views.pack(side='right')
+
+        self.main_area_frame.update()
+        print("Main Frame X Size " , self.main_area_frame.winfo_width())
+        print("Main Frame Y Size " , self.main_area_frame.winfo_height())
+
 
     def callback(self):
         if tkMessageBox.askokcancel("Quit", "Do you really wish to quit?"):
@@ -101,7 +113,6 @@ class Main(tk.Frame):
         self.y = None
         #app.mainloop
         
-
     def create_project_clicked(self,event=None):
         root = tk.Tk()
         app = cP.create_project_window(root)
@@ -137,7 +148,6 @@ class Main(tk.Frame):
         no = tk.Button(popup, text="NO")
         no.grid(row=1,column=4,columnspan=2)
 
-
     def switch_workspace_clicked(self,event=None):
         root = tk.Tk()
         app = wL.workspace_launcher(root)
@@ -167,18 +177,9 @@ class Main(tk.Frame):
         root = tk.Tk()
         app = opw.open_pcap_window(root)
         app.mainloop()
-
-    
-
     
 if __name__ == '__main__':
     root = tk.Tk()         
     app = Main(root)
     #AppKit.NSApplication.sharedApplication().activateIgnoringOtherApps_(True)
     app.mainloop()
-
-'''
-You have one main frame (the one you want to put stuff in)
-
-Then in the little frames (the ones you want to put on the main frame) you pass main frame as a parameter
-'''
