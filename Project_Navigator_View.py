@@ -9,8 +9,10 @@ class Project_Navigator_View(tk.Frame):
         #self.master.resizable(True,True)
         #self.master.tk_setPalette('#ececec')
 
+        main_frame = tk.Frame(self)
+        main_frame.pack(anchor='w',expand=True)
 
-        button_frame = tk.Frame(self)
+        button_frame = tk.Frame(main_frame)
         button_frame.pack(padx=0,pady=0,anchor='w',expand=True)
 
         self.title = tk.Label(button_frame, text="Project Navigator", font='System 14 bold', background='lightblue')
@@ -29,7 +31,7 @@ class Project_Navigator_View(tk.Frame):
         close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
         close.pack(side='left')
 
-        tree_frame = tk.Frame(self)
+        tree_frame = tk.Frame(main_frame)
         tree_frame.pack(padx=0,pady=0,anchor='w',expand=True,fill='both')
 
 
@@ -78,19 +80,15 @@ class Project_Navigator_View(tk.Frame):
         #self.geometry("+%s+%s" % (x, y))
         if (x > 0 and y > 0):
             self.master.place(x=x)
-            self.master.place(y=y)
+            self.master.place(y=y) 
             self.master.update()
-
-
-    def show_project_nav(self):
-        self.pack(side='left')
 
     def OnDoubleClick(self, event):
         item = self.tree.identify('item',event.x,event.y)
         print("you clicked on", self.tree.item(item,"text"))
 
     def close_button_clicked(self,event=None):
-        self.pack_forget()
+        self.grid_forget()
 
     def minimize_button_clicked(self, event=None):
         self.master.iconify()

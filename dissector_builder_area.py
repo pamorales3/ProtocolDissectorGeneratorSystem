@@ -665,11 +665,54 @@ class dissector_builder_area(Frame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        t2 = ToggledFrame(self.master, text='Field', relief="raised", borderwidth=1)
-        t2.pack(fill="x", expand=1, pady=2, padx=2, anchor="n",side=RIGHT)
+        main_frame = Frame(self)
+        main_frame.grid(row=0)
+
+        button_frame = Frame(main_frame)
+        button_frame.grid(row=0,sticky='nsew')
+
+        builder_frame = Frame(main_frame)
+        builder_frame.grid(row=1, sticky='nsew')
+
+        # Window min, max, close button, and title
+        title = Label(button_frame, text="Dissector Builder Area", font='System 14 bold', background='lightblue')
+        title.grid(row=0,column=0)
+
+        minimize = Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
+        minimize.grid(row=0,column=1)
+
+        maximize = Button(button_frame, text="[ ]",bg='lightblue')
+        maximize.grid(row=0,column=2)
+
+        close = Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
+        close.grid(row=0,column=3)
+
+         # create a canvas object and a vertical scrollbar for scrolling it
+        vscrollbar = Scrollbar(builder_frame, orient=VERTICAL)
+        vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
+        canvas = Canvas(builder_frame, bd=0, highlightthickness=0,yscrollcommand=vscrollbar.set)
+        canvas.pack(side=RIGHT, fill=BOTH, expand=TRUE)
+        vscrollbar.config(command=canvas.yview)
+
+        # reset the view
+        canvas.xview_moveto(0)
+        canvas.yview_moveto(0)
+
+        # create a frame inside the canvas which will be scrolled with it
+        self.interior = interior = Frame(canvas)
+        interior_id = canvas.create_window(0, 0, window=interior,anchor=NW)
+
+        '''
+        ////////////////////////////////////////////////////////////////////////////////////
+        /                                  PALETTE SECTION                                 /
+        ////////////////////////////////////////////////////////////////////////////////////
+        ''' 
+
+        t2 = ToggledFrame(self.interior, text='Field', relief="raised", borderwidth=1)
+        t2.grid(row=0,sticky='nsew')
         
-        construct = ToggledFrame(self.master, text='Construct', relief="raised", borderwidth=1)
-        construct.pack(fill="x", expand=1, pady=2, padx=2, anchor="n",side=RIGHT)
+        construct = ToggledFrame(self.interior, text='Construct', relief="raised", borderwidth=1)
+        construct.grid(row=1,sticky='nsew')
     
         
         # Field Draggables 
@@ -803,13 +846,30 @@ class dissector_builder_area(Frame):
         Trash.pack(expand=NO)
         '''
 
-        TargetWidget_TargetObject = CanvasDnd(self.master,relief=RAISED,bd=2)
+        # track changes to the canvas and frame width and sync them,
+        # also updating the scrollbar
+        def _configure_interior(event):
+            # update the scrollbars to match the size of the inner frame
+            size = (interior.winfo_reqwidth(), interior.winfo_reqheight())
+            canvas.config(scrollregion="0 0 %s %s" % size)
+            if interior.winfo_reqwidth() != canvas.winfo_width():
+                # update the canvas's width to fit the inner frame
+                canvas.config(width=interior.winfo_reqwidth())
+        interior.bind('<Configure>', _configure_interior)
+
+        def _configure_canvas(event):
+            if interior.winfo_reqwidth() != canvas.winfo_width():
+                # update the inner frame's width to fill the canvas
+                canvas.itemconfigure(interior_id, width=canvas.winfo_width())
+        canvas.bind('<Configure>', _configure_canvas)
+
+        TargetWidget_TargetObject = CanvasDnd(builder_frame,relief=RAISED,bd=2)
         TargetWidget_TargetObject.pack(side=LEFT)
         
         T = Dragged()
         T.PlaceOnCanvas(TargetWidget_TargetObject,(100,100))
         
-        self.master.mainloop()
+        #self.master.mainloop()
 
     def on_dnd_start(self,Event):
         """
@@ -833,8 +893,15 @@ class dissector_builder_area(Frame):
         Trash.ShowObjectDict('Trash bin')
         print '----------'
 
+
+    def close_button_clicked(self,event=None):
+        self.grid_forget()
+
+    def minimize_button_clicked(self, event=None):
+        print("Minimize was press!")
+
 if __name__ == "__main__":
 
     root = Tk()
     app = dissector_builder_area(root)
-    #app.mainloop()
+    app.mainloop()

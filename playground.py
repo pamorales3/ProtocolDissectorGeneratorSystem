@@ -1,42 +1,25 @@
-import Tkinter as tk
-import tkFileDialog 
+from Tkinter import *
 
-class App(tk.Tk):
-    def __init__(self):
-        tk.Tk.__init__(self)
-        self.floater = FloatingWindow(self)
+root = Tk()
+frame=Frame(root)
+Grid.rowconfigure(root, 0, weight=1)
+Grid.columnconfigure(root, 0, weight=1)
+frame.grid(row=0, column=0, sticky=N+S+E+W)
+grid=Frame(frame)
+grid.grid(sticky=N+S+E+W, column=0, row=7, columnspan=2)
+Grid.rowconfigure(frame, 7, weight=1)
+Grid.columnconfigure(frame, 0, weight=1)
 
-class FloatingWindow(tk.Toplevel):
-    def __init__(self, *args, **kwargs):
-        tk.Toplevel.__init__(self, *args, **kwargs)
-        self.overrideredirect(True)
+#example values
+for x in range(10):
+    for y in range(5):
+        btn = Button(frame)
+        btn.grid(column=x, row=y, sticky=N+S+E+W)
 
-        self.label = tk.Label(self, text="Click on the grip to move")
-        self.grip = tk.Label(self, bitmap="gray25")
-        self.grip.pack(side="left", fill="y")
-        self.label.pack(side="right", fill="both", expand=True)
+for x in range(10):
+  Grid.columnconfigure(frame, x, weight=1)
 
-        self.grip.bind("<ButtonPress-1>", self.StartMove)
-        self.grip.bind("<ButtonRelease-1>", self.StopMove)
-        self.grip.bind("<B1-Motion>", self.OnMotion)
+for y in range(5):
+  Grid.rowconfigure(frame, y, weight=1)
 
-    def StartMove(self, event):
-        self.x = event.x
-        self.y = event.y
-
-    def StopMove(self, event):
-        self.x = None
-        self.y = None
-
-    def OnMotion(self, event):
-        deltax = event.x - self.x
-        deltay = event.y - self.y
-        x = self.winfo_x() + deltax
-        y = self.winfo_y() + deltay
-        self.geometry("+%s+%s" % (x, y))
-
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = App()
-    app.mainloop()
+root.mainloop()

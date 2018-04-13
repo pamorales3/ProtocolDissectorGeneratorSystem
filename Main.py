@@ -11,6 +11,9 @@ import open_pcap_window as opw
 import Project_Navigator_View as pnv
 import output_views as ov
 import dissector_builder_area as dba
+import packet_stream_area as psa
+import dissected_stream_area as dsa 
+
 class Main(tk.Frame):
     
     def __init__(self,master):
@@ -79,6 +82,12 @@ class Main(tk.Frame):
         openPCAPButton = tk.Button(menu_section_frame, text='Open PCAP', command=self.open_pcap_clicked)
         openPCAPButton.pack(side='left')
 
+        '''
+        ////////////////////////////////////////////////////////////////////////////////////
+        /                                  MAIN SECTION                                    /
+        ////////////////////////////////////////////////////////////////////////////////////
+        ''' 
+
         # Main Area Frame
         self.main_area_frame = tk.Frame(self,relief='raised', borderwidth=5)
         self.main_area_frame.pack(padx=5,pady=5,anchor='w')
@@ -86,19 +95,21 @@ class Main(tk.Frame):
         self.project_nav = pnv.Project_Navigator_View(self.main_area_frame)
         self.project_nav.pack(side='left')
 
-        self.dissector_builder = dba.dissector_builder_area(self.main_area_frame)
-        self.dissector_builder.pack(side='right')
+        #self.dissector_builder = dba.dissector_builder_area(self.main_area_frame)
+        #self.dissector_builder.pack(side='right')
 
         self.views_frame = tk.Frame(self,relief='raised', borderwidth=1)
-        self.views_frame.pack(padx=5,pady=5,anchor='s')
+        self.views_frame.pack(padx=5,pady=5,anchor='w')
 
-        self.views = ov.OutputView(self.views_frame)
-        self.views.pack(side='right')
+        self.views = psa.PacketStreamArea(self.views_frame)
+        self.views.pack(side='left')
+
+        self.dissected_stream = dsa.DissectedStreamArea(self.views_frame)
+        self.dissected_stream.pack(side='left')
 
         self.main_area_frame.update()
         print("Main Frame X Size " , self.main_area_frame.winfo_width())
         print("Main Frame Y Size " , self.main_area_frame.winfo_height())
-
 
     def callback(self):
         if tkMessageBox.askokcancel("Quit", "Do you really wish to quit?"):

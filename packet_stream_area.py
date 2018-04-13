@@ -4,8 +4,19 @@ import ttk
 class PacketStreamArea(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self, master)
-        treeview = ttk.Treeview(self)
-        treeview.pack(fill='both',expand=True)
+
+        main_frame = tk.Frame(self)
+        main_frame.grid(row=0)
+        
+        button_frame = tk.Frame(main_frame)
+        button_frame.grid(row=0,sticky='nsew')
+
+        treeview_frame = tk.Frame(main_frame, width=100)
+        treeview_frame.grid(row=1, sticky='nsew')
+
+        self.treeview = ttk.Treeview(treeview_frame)
+        self.treeview.bind("<Double-1>", self.OnDoubleClick)
+        self.treeview.pack(fill='both',expand=True)
 
         # List of tuples for each packet stream, containing the number, time, source, destination, protocol, and info
         packets_list = [("366", "11.767290", "192.168.0.31", "192.168.0.28", "SNMP", "get-response SNMPv2-SMI::enterprises.11.2.3.9.4.2.1.4.1.5.7.1"),
@@ -21,42 +32,65 @@ class PacketStreamArea(tk.Frame):
                 ("390", "12.413611", "64.236.91.21", "192.168.0.28", "TCP", "[TCP segment of a reassembled PDU]"),
                 ("391", "12.414386", "64.236.91.21", "192.168.0.28", "TCP", "[TCP segment of a reassembled PDU]")]
 
-        treeview['columns'] = ('No.','Time','Source','Destination','Protocol','Info')
+        self.treeview['columns'] = ('No.','Time','Source','Destination','Protocol','Info')
+
+        # Window min, max, close button, and title
+        title = tk.Label(button_frame, text="Packet Stream Area", font='System 14 bold', background='lightblue')
+        title.grid(row=0,column=0)
+
+        minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
+        minimize.grid(row=0,column=1)
+
+        maximize = tk.Button(button_frame, text="[ ]",bg='lightblue')
+        maximize.grid(row=0,column=2)
+
+        close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
+        close.grid(row=0,column=3)
 
         #supress the unused identifier column (first column) and keep it out of view
-        treeview['show'] = 'headings'
+        self.treeview['show'] = 'headings'
 
         #set up heading and column for the parent tree view: No.
-        treeview.heading('No.',text='No.',anchor='w')
-        treeview.column('No.',anchor='w', width=75)
+        self.treeview.heading('No.',text='No.',anchor='w')
+        self.treeview.column('No.',anchor='w', width=75)
 
         #set up heading and column for 'Time'
-        treeview.heading('Time', text='Time')
-        treeview.column('Time',anchor='w',width=100)
+        self.treeview.heading('Time', text='Time')
+        self.treeview.column('Time',anchor='w',width=100)
 
         #set up heading and column for 'Source'
-        treeview.heading('Source', text='Source')
-        treeview.column('Source',anchor='w',width=100)
+        self.treeview.heading('Source', text='Source')
+        self.treeview.column('Source',anchor='w',width=100)
 
         #set up heading and column for 'Destination'
-        treeview.heading('Destination', text='Destination')
-        treeview.column('Destination',anchor='w',width=100)
+        self.treeview.heading('Destination', text='Destination')
+        self.treeview.column('Destination',anchor='w',width=100)
 
         #set up heading and column for 'Protocol'
-        treeview.heading('Protocol', text='Protocol')
-        treeview.column('Protocol',anchor='w',width=100)
+        self.treeview.heading('Protocol', text='Protocol')
+        self.treeview.column('Protocol',anchor='w',width=50)
 
         #set up heading and column for 'Info'
-        treeview.heading('Info', text='Info')
-        treeview.column('Info',anchor='w',width=400)
+        self.treeview.heading('Info', text='Info')
+        self.treeview.column('Info',anchor='w',width=100)
 
         #populate table
         for packet in packets_list:
-            treeview.insert('','end',values=((packet[0]),(packet[1]),(packet[2]),(packet[3]),(packet[4]),(packet[5])))
+            self.treeview.insert('','end',values=((packet[0]),(packet[1]),(packet[2]),(packet[3]),(packet[4]),(packet[5])))
 
         #Test index access in the tree view
         if(packets_list[0][4] == 'SNMP'):
             print ('SNMP in first packet')
+
+    def close_button_clicked(self,event=None):
+        self.grid_forget()
+
+    def minimize_button_clicked(self, event=None):
+        print("Minimize was press!")
+
+    def OnDoubleClick(self, event):
+        item = self.treeview.identify('item',event.x,event.y)
+        print("you clicked on", self.treeview.item(item,"text"))
 
 if __name__ == '__main__':
     root = tk.Tk()
