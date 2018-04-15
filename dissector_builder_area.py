@@ -665,13 +665,13 @@ class dissector_builder_area(Frame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        main_frame = Frame(self)
-        main_frame.grid(row=0)
+        #main_frame = Frame(self, bg='red')
+        #main_frame.grid(row=0)
 
-        button_frame = Frame(main_frame)
+        button_frame = Frame(self, bg='cyan')
         button_frame.grid(row=0,sticky='nsew')
 
-        builder_frame = Frame(main_frame)
+        builder_frame = Frame(self, bg='yellow')
         builder_frame.grid(row=1, sticky='nsew')
 
         # Window min, max, close button, and title
@@ -687,78 +687,104 @@ class dissector_builder_area(Frame):
         close = Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
         close.grid(row=0,column=3)
 
-         # create a canvas object and a vertical scrollbar for scrolling it
-        vscrollbar = Scrollbar(builder_frame, orient=VERTICAL)
-        vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
-        canvas = Canvas(builder_frame, bd=0, highlightthickness=0,yscrollcommand=vscrollbar.set)
-        canvas.pack(side=RIGHT, fill=BOTH, expand=TRUE)
-        vscrollbar.config(command=canvas.yview)
-
-        # reset the view
-        canvas.xview_moveto(0)
-        canvas.yview_moveto(0)
-
-        # create a frame inside the canvas which will be scrolled with it
-        self.interior = interior = Frame(canvas)
-        interior_id = canvas.create_window(0, 0, window=interior,anchor=NW)
-
         '''
         ////////////////////////////////////////////////////////////////////////////////////
         /                                  PALETTE SECTION                                 /
         ////////////////////////////////////////////////////////////////////////////////////
         ''' 
 
+         # create a canvas object and a vertical scrollbar for scrolling it
+        vscrollbar = Scrollbar(builder_frame, orient=VERTICAL)
+        vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
+        canvas = Canvas(builder_frame, bd=0, highlightthickness=0,yscrollcommand=vscrollbar.set, bg='green')
+        canvas.pack(side=RIGHT, fill=BOTH, expand=FALSE)
+        vscrollbar.config(command=canvas.yview)        
+
+
+        # reset the view
+        canvas.xview_moveto(0)
+        canvas.yview_moveto(0)
+
+        # create a frame inside the canvas which will be scrolled with it
+        self.interior = interior = Frame(canvas, bg='purple')
+        interior_id = canvas.create_window(0, 0, window=interior,anchor=NW)
+
+
+        # Palette min, max, close button, and title
+        '''
+        palette_title = Label(self.interior, text="Palette", font='System 14 bold', background='lightblue')
+        palette_title.grid(row=0,column=0)
+        
+        palette_minimize = Button(self.interior, text="_")
+        palette_minimize.grid(row=0,column=1)
+
+        palette_maximize = Button(self.interior, text="[ ]")
+        palette_maximize.grid(row=0,column=2)
+        
+        palette_close = Button(self.interior, text="X", command=self.palette_close_button)
+        palette_close.grid(row=0,column=3)
+        '''
         t2 = ToggledFrame(self.interior, text='Field', relief="raised", borderwidth=1)
-        t2.grid(row=0,sticky='nsew')
+        t2.grid(row=2,sticky='ns')
         
         construct = ToggledFrame(self.interior, text='Construct', relief="raised", borderwidth=1)
-        construct.grid(row=1,sticky='nsew')
+        construct.grid(row=3,sticky='ns')
     
         
         # Field Draggables 
+        # You must keep your own reference to the image object or else the image won't always appear
         start = PhotoImage(file="start.gif") 
         InitiationObjectStart = Button(t2.sub_frame,image=start)
-        InitiationObjectStart.grid(row=1,column=1)
+        InitiationObjectStart.image = start         # Keep a reference!
+        InitiationObjectStart.grid(row=0,column=0)
         InitiationObjectStart.bind('<ButtonPress>',self.on_dnd_start)
         
         fieldOne = PhotoImage(file="field1.gif")
         InitiationObjectFieldOne = Button(t2.sub_frame,image=fieldOne)
-        InitiationObjectFieldOne.grid(row=2,column=1)
+        InitiationObjectFieldOne.image = fieldOne
+        InitiationObjectFieldOne.grid(row=1,column=0)
         InitiationObjectFieldOne.bind('<ButtonPress>',self.on_dnd_start)
         
         fieldTwo = PhotoImage(file="field2.gif")
         InitiationObjectFieldTwo = Button(t2.sub_frame,image=fieldTwo)
-        InitiationObjectFieldTwo.grid(row=3,column=1)
+        InitiationObjectFieldTwo.image = fieldTwo
+        InitiationObjectFieldTwo.grid(row=2,column=0)
         InitiationObjectFieldTwo.bind('<ButtonPress>',self.on_dnd_start)
 
         fieldFour = PhotoImage(file="field4.gif")
         InitiationObjectFieldFour = Button(t2.sub_frame,image=fieldFour)
-        InitiationObjectFieldFour.grid(row=4,column=1)
+        InitiationObjectFieldFour.image = fieldFour
+        InitiationObjectFieldFour.grid(row=3,column=0)
         InitiationObjectFieldFour.bind('<ButtonPress>',self.on_dnd_start)
 
         fieldSixteen = PhotoImage(file="field16.gif")
         InitiationObjectFieldSixteen = Button(t2.sub_frame,image=fieldSixteen)
-        InitiationObjectFieldSixteen.grid(row=5,column=1)
+        InitiationObjectFieldSixteen.image = fieldSixteen
+        InitiationObjectFieldSixteen.grid(row=4,column=0)
         InitiationObjectFieldSixteen.bind('<ButtonPress>',self.on_dnd_start)
 
         fieldVar = PhotoImage(file="fieldVar.gif")
         InitiationObjectFieldVar = Button(t2.sub_frame,image=fieldVar)
-        InitiationObjectFieldVar.grid(row=1,column=2)
+        InitiationObjectFieldVar.image = fieldVar
+        InitiationObjectFieldVar.grid(row=0,column=1)
         InitiationObjectFieldVar.bind('<ButtonPress>',self.on_dnd_start)
 
         packet = PhotoImage(file="packet.gif")
         InitiationObjectPacket = Button(t2.sub_frame,image=packet)
-        InitiationObjectPacket.grid(row=2,column=2)
+        InitiationObjectPacket.image = packet
+        InitiationObjectPacket.grid(row=1,column=1)
         InitiationObjectPacket.bind('<ButtonPress>',self.on_dnd_start)
 
         reference = PhotoImage(file="Reference.gif")
         InitiationObjectReference = Button(t2.sub_frame,image=reference)
-        InitiationObjectReference.grid(row=3,column=2)
+        InitiationObjectReference.image = reference
+        InitiationObjectReference.grid(row=2,column=1)
         InitiationObjectReference.bind('<ButtonPress>',self.on_dnd_start)
 
         end = PhotoImage(file="end.gif")
         InitiationObjectEnd = Button(t2.sub_frame,image=end)
-        InitiationObjectEnd.grid(row=4,column=2)
+        InitiationObjectEnd.image = end
+        InitiationObjectEnd.grid(row=3,column=1)
         InitiationObjectEnd.bind('<ButtonPress>',self.on_dnd_start)
 
         # Construct Draggables 
@@ -766,79 +792,91 @@ class dissector_builder_area(Frame):
         expression = PhotoImage(file="expression.gif") 
         expression = expression.subsample(3,3)
         InitiationObjectExpression = Button(construct.sub_frame,image=expression)
-        InitiationObjectExpression.grid(row=1,column=1)
+        InitiationObjectExpression.image = expression
+        InitiationObjectExpression.grid(row=0)
         InitiationObjectExpression.bind('<ButtonPress>',self.on_dnd_start)
 
         connector = PhotoImage(file="connector.gif")
         connector = connector.subsample(3,3) 
         InitiationObjectConnector = Button(construct.sub_frame,image=connector)
-        InitiationObjectConnector.grid(row=2,column=1)
+        InitiationObjectConnector.image = connector
+        InitiationObjectConnector.grid(row=1)
         InitiationObjectConnector.bind('<ButtonPress>',self.on_dnd_start)
 
         InitiationObjectRelational = Label(construct.sub_frame,text="Relational: ")
-        InitiationObjectRelational.grid(row=3,column=1)
+        InitiationObjectRelational.grid(row=2)
         
         less = PhotoImage(file="less.gif") 
         less = less.subsample(4,4)
         InitiationObjectLess = Button(construct.sub_frame,image=less)
-        InitiationObjectLess.grid(row=3,column=2)
+        InitiationObjectLess.image = less
+        InitiationObjectLess.grid(row=3,column=0)
         InitiationObjectLess.bind('<ButtonPress>',self.on_dnd_start)
 
         gtr = PhotoImage(file="greater.gif") 
         gtr = gtr.subsample(4,4)
         InitiationObjectGtr = Button(construct.sub_frame,image=gtr)
-        InitiationObjectGtr.grid(row=3,column=3)
+        InitiationObjectGtr.image = gtr
+        InitiationObjectGtr.grid(row=3,column=1)
         InitiationObjectGtr.bind('<ButtonPress>',self.on_dnd_start)
 
         lessEqual = PhotoImage(file="greater.gif") 
         lessEqual = lessEqual.subsample(4,4)
         InitiationObjectLessEqual = Button(construct.sub_frame,image=lessEqual)
-        InitiationObjectLessEqual.grid(row=3,column=4)
+        InitiationObjectLessEqual.image = lessEqual
+        InitiationObjectLessEqual.grid(row=3,column=2)
         InitiationObjectLessEqual.bind('<ButtonPress>',self.on_dnd_start)
 
         greaterEqual = PhotoImage(file="greaterequal.gif") 
         greaterEqual = greaterEqual.subsample(4,4)
         InitiationObjectGreaterEqual = Button(construct.sub_frame,image=greaterEqual)
-        InitiationObjectGreaterEqual.grid(row=3,column=5)
+        InitiationObjectGreaterEqual.image = greaterEqual
+        InitiationObjectGreaterEqual.grid(row=4,column=0)
         InitiationObjectGreaterEqual.bind('<ButtonPress>',self.on_dnd_start)
 
         equal = PhotoImage(file="equal.gif") 
         equal = equal.subsample(4,4)
         InitiationObjectEqual = Button(construct.sub_frame,image=equal)
-        InitiationObjectEqual.grid(row=4,column=2)
+        InitiationObjectEqual.image = equal
+        InitiationObjectEqual.grid(row=4,column=1)
         InitiationObjectEqual.bind('<ButtonPress>',self.on_dnd_start)
 
         nand = PhotoImage(file="nand.gif") 
         nand = nand.subsample(4,4)
         InitiationObjectNand = Button(construct.sub_frame,image=nand)
-        InitiationObjectNand.grid(row=4,column=3)
+        InitiationObjectNand.image = nand
+        InitiationObjectNand.grid(row=4,column=2)
         InitiationObjectNand.bind('<ButtonPress>',self.on_dnd_start)
 
         InitiationObjectLogical = Label(construct.sub_frame,text="Logical: ")
-        InitiationObjectLogical.grid(row=5,column=1)
+        InitiationObjectLogical.grid(row=5)
 
         andop = PhotoImage(file="and.gif") 
         andop = andop.subsample(4,4)
         InitiationObjectAndop = Button(construct.sub_frame,image=andop)
-        InitiationObjectAndop.grid(row=5,column=2)
+        InitiationObjectAndop.image = andop
+        InitiationObjectAndop.grid(row=6,column=0)
         InitiationObjectAndop.bind('<ButtonPress>',self.on_dnd_start)
 
         orop = PhotoImage(file="or.gif") 
         orop = orop.subsample(4,4)
         InitiationObjectOrop = Button(construct.sub_frame,image=orop)
-        InitiationObjectOrop.grid(row=5,column=3)
+        InitiationObjectOrop.image = orop
+        InitiationObjectOrop.grid(row=6,column=1)
         InitiationObjectOrop.bind('<ButtonPress>',self.on_dnd_start)
 
         notop = PhotoImage(file="not.gif") 
         notop = notop.subsample(4,4)
         InitiationObjectNotop = Button(construct.sub_frame,image=notop)
-        InitiationObjectNotop.grid(row=5,column=4)
+        InitiationObjectNotop.image = notop
+        InitiationObjectNotop.grid(row=6,column=2)
         InitiationObjectNotop.bind('<ButtonPress>',self.on_dnd_start)
 
         oper = PhotoImage(file="oper.gif") 
         oper = oper.subsample(4,4)
         InitiationObjectOper = Button(construct.sub_frame,image=oper)
-        InitiationObjectOper.grid(row=6,column=1)
+        InitiationObjectOper.image = oper
+        InitiationObjectOper.grid(row=7,)
         InitiationObjectOper.bind('<ButtonPress>',self.on_dnd_start)
         
         '''
@@ -863,7 +901,7 @@ class dissector_builder_area(Frame):
                 canvas.itemconfigure(interior_id, width=canvas.winfo_width())
         canvas.bind('<Configure>', _configure_canvas)
 
-        TargetWidget_TargetObject = CanvasDnd(builder_frame,relief=RAISED,bd=2)
+        TargetWidget_TargetObject = CanvasDnd(builder_frame,relief=RAISED,bd=2,height=380,width=790)
         TargetWidget_TargetObject.pack(side=LEFT)
         
         T = Dragged()
@@ -895,7 +933,10 @@ class dissector_builder_area(Frame):
 
 
     def close_button_clicked(self,event=None):
-        self.grid_forget()
+        self.interior.pack_forget()
+
+    def palette_close_button(self,event=None):
+        self.interior.grid_forget()
 
     def minimize_button_clicked(self, event=None):
         print("Minimize was press!")

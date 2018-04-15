@@ -5,13 +5,13 @@ class PacketStreamArea(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self, master)
 
-        main_frame = tk.Frame(self)
+        main_frame = tk.Frame(self, width=100,height=100)
         main_frame.grid(row=0)
         
-        button_frame = tk.Frame(main_frame)
+        button_frame = tk.Frame(main_frame, width=100,height=100)
         button_frame.grid(row=0,sticky='nsew')
 
-        treeview_frame = tk.Frame(main_frame, width=100)
+        treeview_frame = tk.Frame(main_frame, width=100,height=100)
         treeview_frame.grid(row=1, sticky='nsew')
 
         self.treeview = ttk.Treeview(treeview_frame)

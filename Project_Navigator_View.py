@@ -1,22 +1,22 @@
 import Tkinter as tk
 import ttk
-# Tutorial Video Link - https://www.youtube.com/watch?v=Wb1YFgHqUZ8
+
 class Project_Navigator_View(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self,master)
-        self.pack()
+        self.pack(fill='both',expand=True)
         #self.master.title("Project Navigator")
         #self.master.resizable(True,True)
         #self.master.tk_setPalette('#ececec')
 
         main_frame = tk.Frame(self)
-        main_frame.pack(anchor='w',expand=True)
+        main_frame.pack(anchor='w',expand=True,fill='x')
 
         button_frame = tk.Frame(main_frame)
-        button_frame.pack(padx=0,pady=0,anchor='w',expand=True)
+        button_frame.pack(padx=0,pady=0,anchor='w',expand=True,fill='x')
 
         self.title = tk.Label(button_frame, text="Project Navigator", font='System 14 bold', background='lightblue')
-        self.title.pack(side='left')
+        self.title.pack(side='left',fill='x')
 
         self.title.bind("<ButtonPress-1>", self.StartMove)
         self.title.bind("<ButtonRelease-1>", self.StopMove)
@@ -32,13 +32,12 @@ class Project_Navigator_View(tk.Frame):
         close.pack(side='left')
 
         tree_frame = tk.Frame(main_frame)
-        tree_frame.pack(padx=0,pady=0,anchor='w',expand=True,fill='both')
+        tree_frame.pack(anchor='w',expand=True,fill='x')
 
 
         # Create Treeview 
-        self.tree = ttk.Treeview(tree_frame, selectmode='none', height=7)
-        #self.tree.grid(row=1, column=0, columnspan=4, sticky='nsew')
-        self.tree.pack(side='right',fill='both',expand=True)
+        self.tree = ttk.Treeview(tree_frame, selectmode='none',height=190)
+        self.tree.pack(fill='both',expand=True)
         self.tree.bind("<Double-1>", self.OnDoubleClick)
 
         # Setup column heading   #0  is 0 column
@@ -77,7 +76,6 @@ class Project_Navigator_View(tk.Frame):
         deltay = event.y - self.y
         x = self.winfo_x() + deltax
         y = self.winfo_y() + deltay
-        #self.geometry("+%s+%s" % (x, y))
         if (x > 0 and y > 0):
             self.master.place(x=x)
             self.master.place(y=y) 

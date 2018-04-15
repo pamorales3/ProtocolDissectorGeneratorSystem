@@ -93,19 +93,19 @@ class Main(tk.Frame):
         self.main_area_frame.pack(padx=5,pady=5,anchor='w')
 
         self.project_nav = pnv.Project_Navigator_View(self.main_area_frame)
-        self.project_nav.pack(side='left')
+        self.project_nav.pack(side='left',expand=True,fill='both')
 
         #self.dissector_builder = dba.dissector_builder_area(self.main_area_frame)
         #self.dissector_builder.pack(side='right')
 
         self.views_frame = tk.Frame(self,relief='raised', borderwidth=1)
-        self.views_frame.pack(padx=5,pady=5,anchor='w')
+        self.views_frame.pack(padx=5,pady=5,anchor='w',expand=True)
 
         self.views = psa.PacketStreamArea(self.views_frame)
-        self.views.pack(side='left')
+        self.views.pack(side='left',expand=True)
 
         self.dissected_stream = dsa.DissectedStreamArea(self.views_frame)
-        self.dissected_stream.pack(side='left')
+        self.dissected_stream.pack(side='left',expand=True)
 
         self.main_area_frame.update()
         print("Main Frame X Size " , self.main_area_frame.winfo_width())

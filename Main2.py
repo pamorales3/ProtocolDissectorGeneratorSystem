@@ -109,22 +109,22 @@ class Main2(tk.Frame):
         ''' 
 
         self.project_nav = pnv.Project_Navigator_View(ctr_left)
-        self.project_nav.grid(row=0,column=0,rowspan=2)
+        self.project_nav.grid(row=0,column=0,rowspan=2,sticky="nsew")
 
         self.dissector_builder = dba.dissector_builder_area(ctr_mid)
-        self.dissector_builder.grid(row=0,column=1)
+        self.dissector_builder.grid(row=0,column=1,sticky="nsew")
         
         self.views = psa.PacketStreamArea(btm_frame)
-        self.views.grid(row=0,column=1,padx=1)
+        self.views.grid(row=0,column=1,padx=1,pady=1,sticky="nsew")
 
         self.dissected_stream = dsa.DissectedStreamArea(btm_frame)
-        self.dissected_stream.grid(row=0,column=2,padx=1)
+        self.dissected_stream.grid(row=0,column=2,padx=1,pady=1,sticky="nsew")
 
         self.raw_data = rda.RawData(btm_frame)
-        self.raw_data.grid(row=0,column=3,padx=1)
+        self.raw_data.grid(row=0,column=3,padx=1,pady=1,sticky="nsew")
 
         self.console_area = ca.ConsoleApp(btm_frame)
-        self.console_area.grid(row=0,column=4,padx=1)
+        self.console_area.grid(row=0,column=4,padx=1,pady=1,sticky="nsew")
 
 
 if __name__ == '__main__':

@@ -7,31 +7,31 @@ class ConsoleApp(tk.Frame):
         self.pack(fill='both',expand=True)
 
         main_frame = tk.Frame(self)
-        main_frame.grid(row=0)
+        main_frame.grid(row=0,sticky="nsew")
 
         button_frame = tk.Frame(main_frame)
-        button_frame.grid(row=0)
+        button_frame.grid(row=0,sticky="nsew")
 
         listbox_frame = tk.Frame(main_frame)
-        listbox_frame.grid(row=1)
+        listbox_frame.grid(row=1,sticky="nsew")
 
         error_list = ['No error message to show.']
 
         self.listbox = tk.Listbox(listbox_frame, selectmode='extended', bg='white')
-        self.listbox.pack(fill='both',expand=True)
+        self.listbox.pack(fill='x',expand=True)
 
         # Window min, max,close button, and title
-        title = tk.Label(button_frame, text="Raw Data Area", font='System 14 bold', background='lightblue')
-        title.grid(row=0,column=0)
+        title = tk.Label(button_frame, text="Console Area", font='System 14 bold', background='lightblue')
+        title.grid(row=0,column=0,sticky="nsew")
 
         minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked)
-        minimize.grid(row=0,column=1)
+        minimize.grid(row=0,column=1,sticky="nsew")
 
         maximize = tk.Button(button_frame, text="[ ]")
-        maximize.grid(row=0,column=2)
+        maximize.grid(row=0,column=2,sticky="nsew")
 
         close = tk.Button(button_frame, text="X",command=self.close_button_clicked)
-        close.grid(row=0,column=3)
+        close.grid(row=0,column=3,sticky="nsew")
 
         for error in error_list:
             self.listbox.insert('end', error)

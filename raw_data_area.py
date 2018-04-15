@@ -6,26 +6,26 @@ class RawData(tk.Frame):
         self.pack(fill='both',expand=True)
 
         main_frame = tk.Frame(self)
-        main_frame.grid(row=0)
+        main_frame.grid(row=0,sticky="nsew")
 
         button_frame = tk.Frame(main_frame)
-        button_frame.grid(row=0)
+        button_frame.grid(row=0,sticky="nsew")
 
         listbox_frame = tk.Frame(main_frame)
-        listbox_frame.grid(row=1)
+        listbox_frame.grid(row=1,sticky="nsew")
 
         # Window min, max,close button, and title
         title = tk.Label(button_frame, text="Raw Data Area", font='System 14 bold', background='lightblue')
-        title.grid(row=0,column=0)
+        title.grid(row=0,column=0,sticky="nsew")
 
         minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked)
-        minimize.grid(row=0,column=1)
+        minimize.grid(row=0,column=1,sticky="nsew")
 
         maximize = tk.Button(button_frame, text="[ ]")
-        maximize.grid(row=0,column=2)
+        maximize.grid(row=0,column=2,sticky="nsew")
 
         close = tk.Button(button_frame, text="X",command=self.close_button_clicked)
-        close.grid(row=0,column=3)
+        close.grid(row=0,column=3,sticky="nsew")
 
 
         packet_data = ["0000   00 1c 26 26 66 a2 00 0e  8e 04 d0 9e 08 00 45 00    ..&&f... ......E.",
@@ -35,7 +35,7 @@ class RawData(tk.Frame):
                       '0040   6f 6d 00 00 01 00 01 c0  0c 00 01 00 01 00 00 00    om...... ........']
 
         self.listbox = tk.Listbox(listbox_frame, selectmode='extended', bg='white')
-        self.listbox.grid(row=0,column=0,columnspan=3,sticky='nsew')
+        self.listbox.pack(fill='x',expand=True)
 
         for data in packet_data:
             self.listbox.insert('end', data)

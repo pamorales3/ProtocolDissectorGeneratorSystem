@@ -1,35 +1,34 @@
 import Tkinter as tk
 import ttk
 
-
 class DissectedStreamArea(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
         main_frame = tk.Frame(self)
-        main_frame.grid(row=0)
+        main_frame.grid(row=0,sticky="nsew")
 
         button_frame = tk.Frame(main_frame)
-        button_frame.grid(row=0)
+        button_frame.grid(row=0,sticky="nsew")
 
         treeview_frame = tk.Frame(main_frame)
-        treeview_frame.grid(row=1)
+        treeview_frame.grid(row=1,sticky="nsew")
 
         self.treeview = ttk.Treeview(treeview_frame)
-        self.treeview.grid(row=0)
+        self.treeview.pack(fill='x',expand=True)
 
         # Window min, max,close button, and title
         title = tk.Label(button_frame, text="Dissected Stream Area", font='System 14 bold', background='lightblue')
-        title.grid(row=0,column=0)
+        title.grid(row=0,column=0,sticky="nsew")
 
         minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
-        minimize.grid(row=0,column=1)
+        minimize.grid(row=0,column=1,sticky="nsew")
 
         maximize = tk.Button(button_frame, text="[ ]",bg='lightblue')
-        maximize.grid(row=0,column=2)
+        maximize.grid(row=0,column=2,sticky="nsew")
 
         close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
-        close.grid(row=0,column=3)
+        close.grid(row=0,column=3,sticky="nsew")
 
         # Top level ' ' (no name) root node
         # parent, index in the tree, id for item
