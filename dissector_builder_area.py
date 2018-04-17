@@ -42,6 +42,7 @@ from Tkinter import *
 import Tkdnd
 import ttk
 
+# Keeps track of where the mouse cursor is 
 def MouseInWidget(Widget,Canvas,Event,Xlate=1):
     """
     Figure out where the cursor is with respect to a Widget on a Canvas.
@@ -82,6 +83,7 @@ def MouseInWidget(Widget,Canvas,Event,Xlate=1):
         y = int(round(Canvas.canvasy(y)))
     return (x,y)
 
+# Not needed, displays information
 def Blab(Level,Message):
     """
     Display Message if Verbosity says to.
@@ -221,11 +223,14 @@ class Dragged:
         """
         if Widget == None:
             #we need to create one from scratch
-            Result = Label(Parent)
-        else:
+            print("if was executed")
+            Result = Canvas(Parent,height=270,width=290,bg='white')
+            fieldWindow = self.RefernceListWindow()
+            Result.create_window(150,140,window=fieldWindow,anchor='center')
+        else:   
             Result = Widget    
         #set it's attributes appropriately    
-        Result['text'] = ' %s '%self.Name
+        #Result['text'] = '%s '%self.Name
         Result['relief'] = RAISED
         Result['borderwidth'] = 2
         return Result
@@ -250,7 +255,7 @@ class Dragged:
         
     def Appear(self, Canvas, XY):
         """
-        Put an label representing this Dragged instance on Canvas.
+        Put a label representing this Dragged instance on Canvas.
         
         XY says where the mouse pointer is. We don't, however, necessarily want
             to draw our upper left corner at XY. Why not? Because if the user
@@ -469,7 +474,163 @@ class Dragged:
             #Draw a label of ourself for the user to drag around
             XY = MouseInWidget(self.OriginalCanvas,self.OriginalCanvas,Event)
             self.Appear(self.OriginalCanvas,XY)
+
+    def FieldWindow(self):
+        REF_OPTIONS = ["Reference List 1", 'Reference List 2', 'Reference List 3']
+        BASE_OPTIONS = ['2', '4', '8', '16', '32', '64']
+        DATA_TYPE_OPTIONS = ["Int", 'Str', 'Double']
+
+        fieldWindow = Frame()
+        title = Label(fieldWindow,text='Field',font='System 14 bold',bg='lightblue')
+        title.grid(row=0)
+
+        # Field Name Label
+        name = Label(fieldWindow,text='Name',font='System 10 bold')
+        name.grid(row=1,column=0)
+        # Field Name Entry 
+        nameEntry = Entry(fieldWindow,font='System 10 bold')
+        nameEntry.grid(row=1,column=1,sticky='ew')
+
+        # Field Abbreviation Label
+        abbreviation = Label(fieldWindow, text='Abbreviation',font='System 10 bold')
+        abbreviation.grid(row=2,column=0)
+        # Field Abbreviation Entry 
+        abbreviationEntry = Entry(fieldWindow,font='System 10')
+        abbreviationEntry.grid(row=2,column=1,sticky='ew',)
+
+        # Field Description Label
+        description = Label(fieldWindow, text='Description',font='System 10 bold')
+        description.grid(row=3,column=0)
+        # Field Description Entry
+        descriptionEntry = Entry(fieldWindow,font='System 10', width=30)
+        descriptionEntry.grid(row=3,column=1)
+
+        # Field Reference List Label
+        referenceList = Label(fieldWindow, text='Reference List',font='System 10 bold')
+        referenceList.grid(row=4,column=0)
+        # Field Reference List Option Menu
+        ref = StringVar(fieldWindow)
+        ref.set(REF_OPTIONS[0]) # default value
+        referenceListMenu = OptionMenu(fieldWindow, ref, *REF_OPTIONS)
+        referenceListMenu.grid(row=4,column=1,sticky='ew')
+
+        # Field Data Type Label
+        dataType = Label(fieldWindow, text='Data Type',font='System 10 bold')
+        dataType.grid(row=5,column=0)
+        # Field Data Type Option Menu
+        data = StringVar(fieldWindow)
+        data.set(DATA_TYPE_OPTIONS[0]) # default value
+        dataTypeMenu = OptionMenu(fieldWindow, data, *DATA_TYPE_OPTIONS)
+        dataTypeMenu.grid(row=5,column=1,sticky='ew')
+
+        # Field Base Type Label
+        baseType = Label(fieldWindow, text='Base Type',font='System 10 bold')
+        baseType.grid(row=6,column=0)
+        # Field Base Type Option Menu
+        base = StringVar(fieldWindow)
+        base.set(BASE_OPTIONS[0]) # default value
+        baseType = OptionMenu(fieldWindow, base, *BASE_OPTIONS)
+        baseType.grid(row=6,column=1,sticky='ew')
+
+        # Field Mask Label
+        mask = Label(fieldWindow, text='Mask',font='System 10 bold')
+        mask.grid(row=7,column=0)
+        # Field Mask Entry 
+        maskEntry = Entry(fieldWindow,font='System 10')
+        maskEntry.grid(row=7,column=1)
+
+        # Field Value Constraint
+        valueConstraint = Label(fieldWindow, text='Value Constraint',font='System 10 bold')
+        valueConstraint.grid(row=8,column=0)
+        # Field Value Constraint Entry
+        valueConstraintEntry = Entry(fieldWindow,font='System 10')
+        valueConstraintEntry.grid(row=8,column=1)
+
+        # Field Required
+        required = Label(fieldWindow, text='Required',font='System 10 bold')
+        required.grid(row=9,column=0)
+        # Field Required Checkbox
+        requiredCheckBox = Checkbutton(fieldWindow)
+        requiredCheckBox.grid(row=9,column=1)
+
+        return fieldWindow
+
+    def StartFieldWindow(self):    
+        startFieldWindow = Frame()
+        title = Label(startFieldWindow,text='Start Field',font='System 14 bold',bg='lightblue')
+        title.grid(row=0)
+
+        # Start Field - Protocol Name Label
+        protocolName = Label(startFieldWindow,text='Protocol Name',font='System 10 bold')
+        protocolName.grid(row=1,column=0)
+        # Start Field - Protocol Name Entry 
+        protocolNameEntry = Entry(startFieldWindow,font='System 10 bold')
+        protocolNameEntry.grid(row=1,column=1,sticky='ew')
+
+        # Start Field - Protocol Description Label
+        protocolDescription = Label(startFieldWindow, text='Protocol Description',font='System 10 bold')
+        protocolDescription.grid(row=2,column=0)
+        # Start Field - Protocol Description Entry 
+        protocolDescriptionEntry = Entry(startFieldWindow,font='System 10')
+        protocolDescriptionEntry.grid(row=2,column=1,sticky='ew',)
+
+        # Start Field - Dependent Protocol Name Label
+        dependentProtocolName = Label(startFieldWindow, text='Dependent Protocol Name',font='System 10 bold')
+        dependentProtocolName.grid(row=3,column=0)
+        # Start Field - Dependent Protocol Name Entry
+        dependentProtocolNameEntry = Entry(startFieldWindow,font='System 10')
+        dependentProtocolNameEntry.grid(row=3,column=1)
+
+        # Start Field - Dependency Pattern Label
+        dependencyPattern = Label(startFieldWindow, text='Dependency Pattern',font='System 10 bold')
+        dependencyPattern.grid(row=4,column=0)
+        # Start Field - Dependency Pattern Entry
+        dependencyPatternEntry = Entry(startFieldWindow,font='System 10')
+        dependencyPatternEntry.grid(row=4,column=1)
+
+        return startFieldWindow
+
+    def EndFieldWindow(self):
+        endFieldWindow = Frame()
+        title = Label(endFieldWindow,text='End Field',font='System 14 bold',bg='lightblue')
+        title.grid(row=0)
+
+        return endFieldWindow
+
+    def RefernceListWindow(self):
+        self.x = 3
+        
+        referenceList = Frame()
+        top = Frame(referenceList)
+        self.bottom = Frame(referenceList)
+        
+        referenceList.pack()
+        top.grid(row=0)
+        self.bottom.grid(row=1)
+        
+        referenceLabel = Label(top, text="Reference List: ")
+        referenceLabel.grid(row=0,column=0,sticky='w')
+        
+        referenceEntry = Entry(top)
+        referenceEntry.grid(row=0,column=1,sticky='we')     
+
+        Label(self.bottom, text="Value: ").grid(row=0, column=0)        
+        Label(self.bottom, text="Text Description").grid(row=0, column=1)   
+        
+        Entry(self.bottom).grid(row=1, column=1)        
+        Entry(self.bottom).grid(row=1, column=0)
+        
+        Button(self.bottom, text='+', command=self.add).grid(row=10, column=1, sticky='e')
+
+        return referenceList
     
+    def add(self):
+        Entry(self.bottom).grid(row=self.x, column=0) 
+        Entry(self.bottom).grid(row=self.x, column=1) 
+        self.x+=1
+
+        
+
 class CanvasDnd(Canvas):
     """
     A dnd enabled canvas.
@@ -901,8 +1062,18 @@ class dissector_builder_area(Frame):
                 canvas.itemconfigure(interior_id, width=canvas.winfo_width())
         canvas.bind('<Configure>', _configure_canvas)
 
-        TargetWidget_TargetObject = CanvasDnd(builder_frame,relief=RAISED,bd=2,height=380,width=790)
+        TargetWidget_TargetObject = CanvasDnd(builder_frame,relief=RAISED,bd=2,height=380,width=780)
         TargetWidget_TargetObject.pack(side=LEFT)
+
+        hbar=Scrollbar(builder_frame,orient=HORIZONTAL)
+        hbar.pack(side=BOTTOM,fill=X)
+        hbar.config(command=TargetWidget_TargetObject.xview)
+
+        vbar=Scrollbar(builder_frame,orient=VERTICAL)
+        vbar.pack(side=RIGHT,fill=Y)
+        vbar.config(command=TargetWidget_TargetObject.yview)
+
+        TargetWidget_TargetObject.config(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
         
         T = Dragged()
         T.PlaceOnCanvas(TargetWidget_TargetObject,(100,100))
@@ -940,6 +1111,65 @@ class dissector_builder_area(Frame):
 
     def minimize_button_clicked(self, event=None):
         print("Minimize was press!")
+
+class Field(Frame):
+    def __init__(self,master):
+        Frame.__init__(self,master)
+
+        REF_OPTIONS = ["Reference List 1", 'Reference List 2', 'Reference List 3']
+        BASE_OPTIONS = ['2', '4', '8', '16', '32', '64']
+        DATA_TYPE_OPTIONS = ["Int", 'Str', 'Double']
+    
+        #self.title("Field")
+        self.master.columnconfigure(0, weight=1)
+        self.master.rowconfigure(3, weight=1)
+
+        # Create Widgets
+        self.canvasframe = Canvas(self, relief="sunken")
+        self.contentframe = Frame()
+        id = self.canvasframe.create_window(0,0,anchor=NW)
+        
+        self.labels = [
+            Label(self.contentframe, text="Name: "),
+            Label(self.contentframe, text="Abbreviation: "),
+            Label(self.contentframe, text="Description: "),
+            Label(self.contentframe, text="Reference List: "),
+            Label(self.contentframe, text="Data Type: "),
+            Label(self.contentframe, text="Base: "),
+            Label(self.contentframe, text="Mask: "),
+            Label(self.contentframe, text="Value Constraints: "),
+            Label(self.contentframe, text="Required: ")
+        ]
+        
+        self.ref = StringVar(self.contentframe)
+        self.ref.set(REF_OPTIONS[0]) # default value
+        
+        self.base = StringVar(self.contentframe)
+        self.base.set(BASE_OPTIONS[0]) # default value
+        
+        self.data = StringVar(self.contentframe)
+        self.data.set(DATA_TYPE_OPTIONS[0]) # default value
+        
+        self.inputs = [
+            Entry(self.contentframe),
+            Entry(self.contentframe),
+            Entry(self.contentframe),
+            OptionMenu(self.contentframe, self.ref, *REF_OPTIONS),
+            OptionMenu(self.contentframe, self.data, *DATA_TYPE_OPTIONS),
+            OptionMenu(self.contentframe, self.base, *BASE_OPTIONS),
+            Entry(self.contentframe),
+            Entry(self.contentframe),
+            Checkbutton(self.contentframe)
+        ]
+        
+        for i in range(len(self.labels)):
+            self.labels[i].grid(row=i, column=0)
+        for i in range(len(self.labels)):
+            self.inputs[i].grid(row=i, column=1, sticky='ew')
+
+        self.canvasframe.itemconfigure(id, window=self.contentframe)
+
+    
 
 if __name__ == "__main__":
 
