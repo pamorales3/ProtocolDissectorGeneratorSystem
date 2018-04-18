@@ -107,7 +107,7 @@ class Dragged:
     #    tell one instance from another.
     NextNumber = 0
     
-    def __init__(self,Type='Generic'):
+    def __init__(self,name,Type='Generic'):
         """
         Create the dragged object.
         
@@ -133,6 +133,8 @@ class Dragged:
         # We don't yet know the nominal size of the label representing us
         self.NominalLabelWidth = None
         self.NominalLabelHeight = None
+        # The name of the window to be created
+        self.WindowName = name
 
     def PlaceOnCanvas(self,Canvas,XY):
         """
@@ -221,12 +223,31 @@ class Dragged:
             representing widget as you want. You should also override
             method "WidgetHide" below.    
         """
-        if Widget == None:
-            #we need to create one from scratch
-            print("if was executed")
+        if self.WindowName == 'field':
+            print("Field Window was created and dropped")
             Result = Canvas(Parent,height=270,width=290,bg='white')
-            fieldWindow = self.RefernceListWindow()
+            fieldWindow = self.FieldWindow()
             Result.create_window(150,140,window=fieldWindow,anchor='center')
+        elif self.WindowName == 'startField':
+            print("Start Field Window was created and dropped")
+            Result = Canvas(Parent,height=130,width=300,bg='grey')
+            startFieldWindow = self.StartFieldWindow()
+            Result.create_window(155,70,window=startFieldWindow,anchor='center')
+        elif self.WindowName == 'end':
+            print("End Window was created and dropped")
+            Result = Canvas(Parent, height=35,width=80,bg='grey')
+            endWindow = self.EndFieldWindow()
+            Result.create_window(45,25,window=endWindow,anchor='center')
+        elif self.WindowName == 'packetInfo':
+            print("Packet Information Window was created and dropped")
+            Result = Canvas(Parent,height=110,width=390,bg='grey')
+            packetInfoWindow = self.PacketInformationWindow()
+            Result.create_window(200,60,window=packetInfoWindow,anchor='center')
+        elif self.WindowName == 'referenceList':
+            print("Reference List Window was created and dropped")
+            Result = Canvas(Parent,height=170,width=370,bg='grey')
+            referenceListWindow = self.ReferenceListWindow()
+            Result.create_window(150,140,window=referenceListWindow,anchor='center')
         else:   
             Result = Widget    
         #set it's attributes appropriately    
@@ -480,112 +501,141 @@ class Dragged:
         BASE_OPTIONS = ['2', '4', '8', '16', '32', '64']
         DATA_TYPE_OPTIONS = ["Int", 'Str', 'Double']
 
-        fieldWindow = Frame()
-        title = Label(fieldWindow,text='Field',font='System 14 bold',bg='lightblue')
-        title.grid(row=0)
+        fieldWindow = Frame(bg='lightblue')
+        fieldWindow.pack()
+        titleFrame = Frame(fieldWindow,bg='lightblue')
+        self.infoFrame = Frame(fieldWindow, bg='white')
+
+        titleFrame.grid(row=0)
+        self.infoFrame.grid(row=1)
+
+        # Window Title and Buttons
+        title = Label(titleFrame,text='Field',font='System 14 bold',bg='lightblue')
+        title.grid(row=0,column=0,sticky='w')
+        
+        titleMin = Button(titleFrame,text='_',font='System 12 bold',bg='lightblue',command=self.close_window)
+        titleMin.grid(row=0,column=1,sticky='w')
+
+        titleMax = Button(titleFrame,text='[ ]',font='System 12 bold',bg='lightblue',command=self.expand_window)
+        titleMax.grid(row=0,column=2,sticky='w')
 
         # Field Name Label
-        name = Label(fieldWindow,text='Name',font='System 10 bold')
-        name.grid(row=1,column=0)
+        name = Label(self.infoFrame,text='Name',font='System 10 bold',bg='white')
+        name.grid(row=0,column=0)
         # Field Name Entry 
-        nameEntry = Entry(fieldWindow,font='System 10 bold')
-        nameEntry.grid(row=1,column=1,sticky='ew')
+        nameEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        nameEntry.grid(row=0,column=1,sticky='ew')
 
         # Field Abbreviation Label
-        abbreviation = Label(fieldWindow, text='Abbreviation',font='System 10 bold')
-        abbreviation.grid(row=2,column=0)
+        abbreviation = Label(self.infoFrame, text='Abbreviation',font='System 10 bold',bg='white')
+        abbreviation.grid(row=1,column=0)
         # Field Abbreviation Entry 
-        abbreviationEntry = Entry(fieldWindow,font='System 10')
-        abbreviationEntry.grid(row=2,column=1,sticky='ew',)
+        abbreviationEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        abbreviationEntry.grid(row=1,column=1,sticky='ew',)
 
         # Field Description Label
-        description = Label(fieldWindow, text='Description',font='System 10 bold')
-        description.grid(row=3,column=0)
+        description = Label(self.infoFrame, text='Description',font='System 10 bold',bg='white')
+        description.grid(row=2,column=0)
         # Field Description Entry
-        descriptionEntry = Entry(fieldWindow,font='System 10', width=30)
-        descriptionEntry.grid(row=3,column=1)
+        descriptionEntry = Entry(self.infoFrame,font='System 10', width=30,bg='white')
+        descriptionEntry.grid(row=2,column=1)
 
         # Field Reference List Label
-        referenceList = Label(fieldWindow, text='Reference List',font='System 10 bold')
-        referenceList.grid(row=4,column=0)
+        referenceList = Label(self.infoFrame, text='Reference List',font='System 10 bold',bg='white')
+        referenceList.grid(row=3,column=0)
         # Field Reference List Option Menu
-        ref = StringVar(fieldWindow)
+        ref = StringVar(self.infoFrame)
         ref.set(REF_OPTIONS[0]) # default value
-        referenceListMenu = OptionMenu(fieldWindow, ref, *REF_OPTIONS)
-        referenceListMenu.grid(row=4,column=1,sticky='ew')
+        referenceListMenu = OptionMenu(self.infoFrame, ref, *REF_OPTIONS)
+        referenceListMenu.grid(row=3,column=1,sticky='ew')
 
         # Field Data Type Label
-        dataType = Label(fieldWindow, text='Data Type',font='System 10 bold')
-        dataType.grid(row=5,column=0)
+        dataType = Label(self.infoFrame, text='Data Type',font='System 10 bold',bg='white')
+        dataType.grid(row=4,column=0)
         # Field Data Type Option Menu
-        data = StringVar(fieldWindow)
+        data = StringVar(self.infoFrame)
         data.set(DATA_TYPE_OPTIONS[0]) # default value
-        dataTypeMenu = OptionMenu(fieldWindow, data, *DATA_TYPE_OPTIONS)
-        dataTypeMenu.grid(row=5,column=1,sticky='ew')
+        dataTypeMenu = OptionMenu(self.infoFrame, data, *DATA_TYPE_OPTIONS)
+        dataTypeMenu.grid(row=4,column=1,sticky='ew')
 
         # Field Base Type Label
-        baseType = Label(fieldWindow, text='Base Type',font='System 10 bold')
-        baseType.grid(row=6,column=0)
+        baseType = Label(self.infoFrame, text='Base Type',font='System 10 bold',bg='white')
+        baseType.grid(row=5,column=0)
         # Field Base Type Option Menu
-        base = StringVar(fieldWindow)
+        base = StringVar(self.infoFrame)
         base.set(BASE_OPTIONS[0]) # default value
-        baseType = OptionMenu(fieldWindow, base, *BASE_OPTIONS)
-        baseType.grid(row=6,column=1,sticky='ew')
+        baseType = OptionMenu(self.infoFrame, base, *BASE_OPTIONS)
+        baseType.grid(row=5,column=1,sticky='ew')
 
         # Field Mask Label
-        mask = Label(fieldWindow, text='Mask',font='System 10 bold')
-        mask.grid(row=7,column=0)
+        mask = Label(self.infoFrame, text='Mask',font='System 10 bold',bg='white')
+        mask.grid(row=6,column=0)
         # Field Mask Entry 
-        maskEntry = Entry(fieldWindow,font='System 10')
-        maskEntry.grid(row=7,column=1)
+        maskEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        maskEntry.grid(row=6,column=1)
 
         # Field Value Constraint
-        valueConstraint = Label(fieldWindow, text='Value Constraint',font='System 10 bold')
-        valueConstraint.grid(row=8,column=0)
+        valueConstraint = Label(self.infoFrame, text='Value Constraint',font='System 10 bold',bg='white')
+        valueConstraint.grid(row=7,column=0)
         # Field Value Constraint Entry
-        valueConstraintEntry = Entry(fieldWindow,font='System 10')
-        valueConstraintEntry.grid(row=8,column=1)
+        valueConstraintEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        valueConstraintEntry.grid(row=7,column=1)
 
         # Field Required
-        required = Label(fieldWindow, text='Required',font='System 10 bold')
-        required.grid(row=9,column=0)
+        required = Label(self.infoFrame, text='Required',font='System 10 bold',bg='white')
+        required.grid(row=8,column=0)
         # Field Required Checkbox
-        requiredCheckBox = Checkbutton(fieldWindow)
-        requiredCheckBox.grid(row=9,column=1)
+        requiredCheckBox = Checkbutton(self.infoFrame)
+        requiredCheckBox.grid(row=8,column=1)
 
         return fieldWindow
 
     def StartFieldWindow(self):    
-        startFieldWindow = Frame()
-        title = Label(startFieldWindow,text='Start Field',font='System 14 bold',bg='lightblue')
-        title.grid(row=0)
+
+        startFieldWindow = Frame(bg='lightblue')
+        titleFrame = Frame(startFieldWindow,bg='lightblue')
+        self.infoFrame = Frame(startFieldWindow, bg='white')
+
+        startFieldWindow.pack()
+        titleFrame.grid(row=0)
+        self.infoFrame.grid(row=1)
+
+        # Window Title and Buttons
+        title = Label(titleFrame,text='Start Field',font='System 14 bold',bg='lightblue')
+        title.grid(row=0,column=0,sticky='w')
+        
+        titleMin = Button(titleFrame,text='_',font='System 12 bold',bg='lightblue',command=self.close_window)
+        titleMin.grid(row=0,column=1,sticky='w')
+
+        titleMax = Button(titleFrame,text='[ ]',font='System 12 bold',bg='lightblue',command=self.expand_window)
+        titleMax.grid(row=0,column=2,sticky='w')
 
         # Start Field - Protocol Name Label
-        protocolName = Label(startFieldWindow,text='Protocol Name',font='System 10 bold')
+        protocolName = Label(self.infoFrame,text='Protocol Name',font='System 10 bold',bg='white')
         protocolName.grid(row=1,column=0)
         # Start Field - Protocol Name Entry 
-        protocolNameEntry = Entry(startFieldWindow,font='System 10 bold')
+        protocolNameEntry = Entry(self.infoFrame,font='System 10 bold',bg='white')
         protocolNameEntry.grid(row=1,column=1,sticky='ew')
 
         # Start Field - Protocol Description Label
-        protocolDescription = Label(startFieldWindow, text='Protocol Description',font='System 10 bold')
+        protocolDescription = Label(self.infoFrame, text='Protocol Description',font='System 10 bold',bg='white')
         protocolDescription.grid(row=2,column=0)
         # Start Field - Protocol Description Entry 
-        protocolDescriptionEntry = Entry(startFieldWindow,font='System 10')
+        protocolDescriptionEntry = Entry(self.infoFrame,font='System 10',bg='white')
         protocolDescriptionEntry.grid(row=2,column=1,sticky='ew',)
 
         # Start Field - Dependent Protocol Name Label
-        dependentProtocolName = Label(startFieldWindow, text='Dependent Protocol Name',font='System 10 bold')
+        dependentProtocolName = Label(self.infoFrame, text='Dependent Protocol Name',font='System 10 bold',bg='white')
         dependentProtocolName.grid(row=3,column=0)
         # Start Field - Dependent Protocol Name Entry
-        dependentProtocolNameEntry = Entry(startFieldWindow,font='System 10')
+        dependentProtocolNameEntry = Entry(self.infoFrame,font='System 10',bg='white')
         dependentProtocolNameEntry.grid(row=3,column=1)
 
         # Start Field - Dependency Pattern Label
-        dependencyPattern = Label(startFieldWindow, text='Dependency Pattern',font='System 10 bold')
+        dependencyPattern = Label(self.infoFrame, text='Dependency Pattern',font='System 10 bold',bg='white')
         dependencyPattern.grid(row=4,column=0)
         # Start Field - Dependency Pattern Entry
-        dependencyPatternEntry = Entry(startFieldWindow,font='System 10')
+        dependencyPatternEntry = Entry(self.infoFrame,font='System 10',bg='white')
         dependencyPatternEntry.grid(row=4,column=1)
 
         return startFieldWindow
@@ -597,39 +647,91 @@ class Dragged:
 
         return endFieldWindow
 
-    def RefernceListWindow(self):
+    def ReferenceListWindow(self):
         self.x = 3
         
         referenceList = Frame()
-        top = Frame(referenceList)
-        self.bottom = Frame(referenceList)
+        titleFrame = Frame(referenceList,bg='lightblue')
+        self.infoFrame = Frame(referenceList)
         
         referenceList.pack()
-        top.grid(row=0)
-        self.bottom.grid(row=1)
+        titleFrame.grid(row=0)
+        self.infoFrame.grid(row=1)
+
+        # Window Title and Buttons
+        title = Label(titleFrame,text='Field',font='System 14 bold',bg='lightblue')
+        title.grid(row=0,column=0,sticky='w')
         
-        referenceLabel = Label(top, text="Reference List: ")
+        titleMin = Button(titleFrame,text='_',font='System 12 bold',bg='lightblue',command=self.close_window)
+        titleMin.grid(row=0,column=1,sticky='w')
+
+        titleMax = Button(titleFrame,text='[ ]',font='System 12 bold',bg='lightblue',command=self.expand_window)
+        titleMax.grid(row=0,column=2,sticky='w')
+        
+        referenceLabel = Label(self.infoFrame, text="Reference List: ",font='System 12 bold')
         referenceLabel.grid(row=0,column=0,sticky='w')
         
-        referenceEntry = Entry(top)
+        referenceEntry = Entry(self.infoFrame)
         referenceEntry.grid(row=0,column=1,sticky='we')     
 
-        Label(self.bottom, text="Value: ").grid(row=0, column=0)        
-        Label(self.bottom, text="Text Description").grid(row=0, column=1)   
+        Label(self.infoFrame, text="Value: ").grid(row=1, column=0,font='System 12 bold')        
+        Label(self.infoFrame, text="Text Description").grid(row=1, column=1,font='System 12 bold')   
         
-        Entry(self.bottom).grid(row=1, column=1)        
-        Entry(self.bottom).grid(row=1, column=0)
+        Entry(self.infoFrame).grid(row=2, column=0)        
+        Entry(self.infoFrame).grid(row=2, column=1)
         
-        Button(self.bottom, text='+', command=self.add).grid(row=10, column=1, sticky='e')
+        Button(self.infoFrame, text='+', command=self.add).grid(row=10, column=1, sticky='e')
 
         return referenceList
     
+    def PacketInformationWindow(self):
+        self.r = 3
+        
+        main = Frame(bg='lightblue')
+        title = Frame(main,bg='lightblue')
+        self.packetInfo = Frame(main,bg='white')
+        
+        main.pack()
+        title.grid(row=0)
+        self.packetInfo.grid(row=1)
+
+        titleLabel = Label(title,text='Packet Information',font='System 12 bold',bg='lightblue')
+        titleLabel.grid(row=0,column=0,sticky='w')
+
+        titleMin = Button(title,text='_',font='System 12 bold',bg='lightblue')
+        titleMin.grid(row=0,column=1,sticky='w')
+
+        titleMax = Button(title,text='[ ]',font='System 12 bold',bg='lightblue')
+        titleMax.grid(row=0,column=2,sticky='w')
+        
+        valueLabel = Label(self.packetInfo, text="Value",font='System 12 bold',bg='white')
+        valueLabel.grid(row=0,column=0,sticky='nesw')
+        
+        textDescription = Label(self.packetInfo, text='Text Description',font='System 12 bold',bg='white')
+        textDescription.grid(row=0,column=1,sticky='nesw')      
+        
+        Entry(self.packetInfo).grid(row=1, column=0)        
+        Entry(self.packetInfo).grid(row=1, column=1)
+        
+        Button(self.packetInfo, text='+', bg='white',command=self.addInfo).grid(row=10, column=1, sticky='e')
+
+        return main
+
     def add(self):
-        Entry(self.bottom).grid(row=self.x, column=0) 
-        Entry(self.bottom).grid(row=self.x, column=1) 
+        Entry(self.infoFrame).grid(row=self.x, column=0) 
+        Entry(self.infoFrame).grid(row=self.x, column=1) 
         self.x+=1
 
-        
+    def addInfo(self):
+        Entry(self.packetInfo).grid(row=self.r,column=0)
+        Entry(self.packetInfo).grid(row=self.r,column=1)
+        self.r += 1
+
+    def close_window(self):
+        self.infoFrame.grid_forget()
+
+    def expand_window(self):
+        self.infoFrame.grid()
 
 class CanvasDnd(Canvas):
     """
@@ -898,55 +1000,55 @@ class dissector_builder_area(Frame):
         InitiationObjectStart = Button(t2.sub_frame,image=start)
         InitiationObjectStart.image = start         # Keep a reference!
         InitiationObjectStart.grid(row=0,column=0)
-        InitiationObjectStart.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectStart.bind('<ButtonPress>', lambda event, n='startField':self.on_dnd_start(event,n))
         
         fieldOne = PhotoImage(file="field1.gif")
         InitiationObjectFieldOne = Button(t2.sub_frame,image=fieldOne)
         InitiationObjectFieldOne.image = fieldOne
         InitiationObjectFieldOne.grid(row=1,column=0)
-        InitiationObjectFieldOne.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectFieldOne.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
         
         fieldTwo = PhotoImage(file="field2.gif")
         InitiationObjectFieldTwo = Button(t2.sub_frame,image=fieldTwo)
         InitiationObjectFieldTwo.image = fieldTwo
         InitiationObjectFieldTwo.grid(row=2,column=0)
-        InitiationObjectFieldTwo.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectFieldTwo.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
 
         fieldFour = PhotoImage(file="field4.gif")
         InitiationObjectFieldFour = Button(t2.sub_frame,image=fieldFour)
         InitiationObjectFieldFour.image = fieldFour
         InitiationObjectFieldFour.grid(row=3,column=0)
-        InitiationObjectFieldFour.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectFieldFour.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
 
         fieldSixteen = PhotoImage(file="field16.gif")
         InitiationObjectFieldSixteen = Button(t2.sub_frame,image=fieldSixteen)
         InitiationObjectFieldSixteen.image = fieldSixteen
         InitiationObjectFieldSixteen.grid(row=4,column=0)
-        InitiationObjectFieldSixteen.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectFieldSixteen.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
 
         fieldVar = PhotoImage(file="fieldVar.gif")
         InitiationObjectFieldVar = Button(t2.sub_frame,image=fieldVar)
         InitiationObjectFieldVar.image = fieldVar
         InitiationObjectFieldVar.grid(row=0,column=1)
-        InitiationObjectFieldVar.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectFieldVar.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
 
         packet = PhotoImage(file="packet.gif")
         InitiationObjectPacket = Button(t2.sub_frame,image=packet)
         InitiationObjectPacket.image = packet
         InitiationObjectPacket.grid(row=1,column=1)
-        InitiationObjectPacket.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectPacket.bind('<ButtonPress>',lambda event, n='packetInfo':self.on_dnd_start(event,n))
 
         reference = PhotoImage(file="Reference.gif")
         InitiationObjectReference = Button(t2.sub_frame,image=reference)
         InitiationObjectReference.image = reference
         InitiationObjectReference.grid(row=2,column=1)
-        InitiationObjectReference.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectReference.bind('<ButtonPress>',lambda event, n='referenceList':self.on_dnd_start(event,n))
 
         end = PhotoImage(file="end.gif")
         InitiationObjectEnd = Button(t2.sub_frame,image=end)
         InitiationObjectEnd.image = end
         InitiationObjectEnd.grid(row=3,column=1)
-        InitiationObjectEnd.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectEnd.bind('<ButtonPress>',lambda event, n='end':self.on_dnd_start(event,n))
 
         # Construct Draggables 
         
@@ -1075,17 +1177,17 @@ class dissector_builder_area(Frame):
 
         TargetWidget_TargetObject.config(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
         
-        T = Dragged()
-        T.PlaceOnCanvas(TargetWidget_TargetObject,(100,100))
+        #T = Dragged('field')
+        #T.PlaceOnCanvas(TargetWidget_TargetObject,(100,100))
         
         #self.master.mainloop()
 
-    def on_dnd_start(self,Event):
+    def on_dnd_start(self,Event,name):
         """
         This is invoked by InitiationObject to start the drag and drop process.
         """
         #Create an object to be dragged
-        ThingToDrag = Dragged()
+        ThingToDrag = Dragged(name)
         #Pass the object to be dragged and the event to Tkdnd
         Tkdnd.dnd_start(ThingToDrag,Event)
 
