@@ -31,12 +31,11 @@ class Project_Navigator_View(tk.Frame):
         close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
         close.pack(side='left')
 
-        tree_frame = tk.Frame(main_frame)
-        tree_frame.pack(anchor='w',expand=True,fill='x')
-
+        self.tree_frame = tk.Frame(main_frame)
+        self.tree_frame.pack(anchor='w',expand=True,fill='x')
 
         # Create Treeview 
-        self.tree = ttk.Treeview(tree_frame, selectmode='none',height=190)
+        self.tree = ttk.Treeview(self.tree_frame, selectmode='none',height=190)
         self.tree.pack(fill='both',expand=True)
         self.tree.bind("<Double-1>", self.OnDoubleClick)
 
@@ -88,8 +87,11 @@ class Project_Navigator_View(tk.Frame):
     def close_button_clicked(self,event=None):
         self.grid_forget()
 
-    def minimize_button_clicked(self, event=None):
-        self.master.iconify()
+    def minimize_button_clicked(self,event=None):
+        self.tree_frame.grid_forget()
+
+    def maximize_button_clicked(self,event=None):
+        self.tree_frame.grid()
 
 
 if __name__ == '__main__':

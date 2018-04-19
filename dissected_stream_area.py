@@ -5,16 +5,16 @@ class DissectedStreamArea(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
-        main_frame = tk.Frame(self)
-        main_frame.grid(row=0,sticky="nsew")
+        self.main_frame = tk.Frame(self)
+        self.main_frame.grid(row=0,sticky="nsew")
 
-        button_frame = tk.Frame(main_frame)
+        button_frame = tk.Frame(self.main_frame)
         button_frame.grid(row=0,sticky="nsew")
 
-        treeview_frame = tk.Frame(main_frame)
-        treeview_frame.grid(row=1,sticky="nsew")
+        self.treeview_frame = tk.Frame(self.main_frame)
+        self.treeview_frame.grid(row=1,sticky="nsew")
 
-        self.treeview = ttk.Treeview(treeview_frame)
+        self.treeview = ttk.Treeview(self.treeview_frame)
         self.treeview.pack(fill='x',expand=True)
 
         # Window min, max,close button, and title
@@ -24,7 +24,7 @@ class DissectedStreamArea(tk.Frame):
         minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
         minimize.grid(row=0,column=1,sticky="nsew")
 
-        maximize = tk.Button(button_frame, text="[ ]",bg='lightblue')
+        maximize = tk.Button(button_frame, text="[ ]",bg='lightblue',command=self.maximize_button_clicked)
         maximize.grid(row=0,column=2,sticky="nsew")
 
         close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
@@ -58,10 +58,13 @@ class DissectedStreamArea(tk.Frame):
         self.treeview.insert('cnn', '2', 'class', text='Class: IN (0x0001)')
 
     def close_button_clicked(self,event=None):
-        self.grid_forget()
+        self.main_frame.grid_forget()
 
     def minimize_button_clicked(self, event=None):
-        print("Minimize was press!")
+        self.treeview_frame.grid_forget()
+    
+    def maximize_button_clicked(self, event=None):
+        self.treeview_frame.grid(row=1,sticky="nsew")
 
 
 if __name__ == '__main__':

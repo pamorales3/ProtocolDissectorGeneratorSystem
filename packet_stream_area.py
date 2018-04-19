@@ -11,10 +11,10 @@ class PacketStreamArea(tk.Frame):
         button_frame = tk.Frame(main_frame, width=100,height=100)
         button_frame.grid(row=0,sticky='nsew')
 
-        treeview_frame = tk.Frame(main_frame, width=100,height=100)
-        treeview_frame.grid(row=1, sticky='nsew')
+        self.treeview_frame = tk.Frame(main_frame, width=100,height=100)
+        self.treeview_frame.grid(row=1, sticky='nsew')
 
-        self.treeview = ttk.Treeview(treeview_frame)
+        self.treeview = ttk.Treeview(self.treeview_frame)
         self.treeview.bind("<Double-1>", self.OnDoubleClick)
         self.treeview.pack(fill='both',expand=True)
 
@@ -38,10 +38,10 @@ class PacketStreamArea(tk.Frame):
         title = tk.Label(button_frame, text="Packet Stream Area", font='System 14 bold', background='lightblue')
         title.grid(row=0,column=0)
 
-        minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
+        minimize = tk.Button(button_frame, text="_", bg="lightblue",command=self.minimize_button_clicked)
         minimize.grid(row=0,column=1)
 
-        maximize = tk.Button(button_frame, text="[ ]",bg='lightblue')
+        maximize = tk.Button(button_frame, text="[ ]",bg='lightblue',command=self.maximize_button_clicked)
         maximize.grid(row=0,column=2)
 
         close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
@@ -86,7 +86,10 @@ class PacketStreamArea(tk.Frame):
         self.grid_forget()
 
     def minimize_button_clicked(self, event=None):
-        print("Minimize was press!")
+        self.treeview_frame.grid_forget()
+
+    def maximize_button_clicked(self, event=None):
+        self.treeview_frame.grid()
 
     def OnDoubleClick(self, event):
         item = self.treeview.identify('item',event.x,event.y)
