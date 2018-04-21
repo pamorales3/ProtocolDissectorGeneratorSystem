@@ -697,8 +697,8 @@ class dissector_builder_area(Frame):
         button_frame = Frame(self, bg='cyan')
         button_frame.grid(row=0,sticky='nsew')
 
-        builder_frame = Frame(self, bg='yellow')
-        builder_frame.grid(row=1, sticky='nsew')
+        self.builder_frame = Frame(self, bg='yellow')
+        self.builder_frame.grid(row=1, sticky='nsew')
 
         # Window min, max, close button, and title
         title = Label(button_frame, text="Dissector Builder Area", font='System 14 bold', background='lightblue')
@@ -707,7 +707,7 @@ class dissector_builder_area(Frame):
         minimize = Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
         minimize.grid(row=0,column=1)
 
-        maximize = Button(button_frame, text="[ ]",bg='lightblue')
+        maximize = Button(button_frame, text="[ ]",bg='lightblue',command=self.maximize_button_clicked)
         maximize.grid(row=0,column=2)
 
         close = Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
@@ -720,9 +720,9 @@ class dissector_builder_area(Frame):
         ''' 
 
          # create a canvas object and a vertical scrollbar for scrolling it
-        vscrollbar = Scrollbar(builder_frame, orient=VERTICAL)
+        vscrollbar = Scrollbar(self.builder_frame, orient=VERTICAL)
         vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
-        canvas = Canvas(builder_frame, bd=0, highlightthickness=0,yscrollcommand=vscrollbar.set, bg='green')
+        canvas = Canvas(self.builder_frame, bd=0, highlightthickness=0,yscrollcommand=vscrollbar.set, bg='green')
         canvas.pack(side=RIGHT, fill=BOTH, expand=FALSE)
         vscrollbar.config(command=canvas.yview)        
 
@@ -927,14 +927,14 @@ class dissector_builder_area(Frame):
                 canvas.itemconfigure(interior_id, width=canvas.winfo_width())
         canvas.bind('<Configure>', _configure_canvas)
 
-        TargetWidget_TargetObject = CanvasDnd(builder_frame,relief=RAISED,bd=2,height=380,width=780)
+        TargetWidget_TargetObject = CanvasDnd(self.builder_frame,relief=RAISED,bd=2,height=380,width=780)
         TargetWidget_TargetObject.pack(side=LEFT)
 
-        hbar=Scrollbar(builder_frame,orient=HORIZONTAL)
+        hbar=Scrollbar(self.builder_frame,orient=HORIZONTAL)
         hbar.pack(side=BOTTOM,fill=X)
         hbar.config(command=TargetWidget_TargetObject.xview)
 
-        vbar=Scrollbar(builder_frame,orient=VERTICAL)
+        vbar=Scrollbar(self.builder_frame,orient=VERTICAL)
         vbar.pack(side=RIGHT,fill=Y)
         vbar.config(command=TargetWidget_TargetObject.yview)
 
@@ -969,13 +969,13 @@ class dissector_builder_area(Frame):
 
 
     def close_button_clicked(self,event=None):
-        self.interior.pack_forget()
+        self.master.grid_forget()
 
-    def palette_close_button(self,event=None):
-        self.interior.grid_forget()
+    def maximize_button_clicked(self,event=None):
+        self.builder_frame.grid()
 
     def minimize_button_clicked(self, event=None):
-        print("Minimize was press!")
+        self.builder_frame.grid_forget()
 
 class FieldWindow(Frame):
     def __init__(self,master):
@@ -1104,7 +1104,7 @@ class StartFieldWindow(Frame):
         protocolName = Label(self.infoFrame,text='Protocol Name',font='System 10 bold',bg='white')
         protocolName.grid(row=1,column=0)
         # Start Field - Protocol Name Entry 
-        protocolNameEntry = Entry(self.infoFrame,font='System 10 bold',bg='white')
+        protocolNameEntry = Entry(self.infoFrame,font='System 10',bg='white')
         protocolNameEntry.grid(row=1,column=1,sticky='ew')
 
         # Start Field - Protocol Description Label
@@ -1187,8 +1187,8 @@ class PacketInformationWindow(Frame):
         self.packetInfo.grid()
 
     def addInfo(self):
-        Entry(self.packetInfo,font='System 10',bg='white').grid(row=self.r,column=0)
-        Entry(self.packetInfo,font='System 10',bg='white').grid(row=self.r,column=1)
+        Entry(self.packetInfo,font='System 12',bg='white').grid(row=self.r,column=0)
+        Entry(self.packetInfo,font='System 12',bg='white').grid(row=self.r,column=1)
         self.r += 1
 
 class ReferenceListWindow(Frame):

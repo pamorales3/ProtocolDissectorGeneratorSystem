@@ -18,6 +18,7 @@ class Main(tk.Frame):
     
     def __init__(self,master):
         tk.Frame.__init__(self,master)
+        self.switch_workspace_clicked
         self.pack()
         self.master.title("")
         self.master.resizable(True,True)
