@@ -248,6 +248,24 @@ class Dragged:
             Result = Canvas(Parent,height=130,width=350,bg='white')
             referenceListWindow = ReferenceListWindow(Parent)
             Result.create_window(180,70,window=referenceListWindow,anchor='center')
+        elif self.WindowName == 'less than':
+            Result = Button(Parent, text = "<")
+        elif self.WindowName == 'lessequal':
+            Result = Button(Parent, text = '<=')
+        elif self.WindowName == 'greater':
+            Result = Button(Parent, text = '>')
+        elif self.WindowName == 'greaterequal':
+            Result = Button(Parent, text = '>=')
+        elif self.WindowName == 'equal':
+            Result = Button(Parent, text = '==')
+        elif self.WindowName == 'nand':
+            Result = Button(Parent, text = '~=')
+        elif self.WindowName == 'and':
+            Result = Button(Parent, text = 'AND')
+        elif self.WindowName == 'or':
+            Result = Button(Parent, text = 'OR')
+        elif self.WindowName == 'not':
+            Result = Button(Parent, text = 'NOT')
         else:   
             Result = Widget    
         #set it's attributes appropriately    
@@ -456,7 +474,7 @@ class Dragged:
                redrawn on another canvas without Anything Bad happening.           
 
         From the users viewpoint the whole thing is seamless: they think
-            the ARE dragging around the original label, but they are not. To 
+            they ARE dragging around the original label, but they are not. To 
             make it really clear what is happening, go to the top of the
             code and set "LeavePhantomVisible" to 1. Then when you drag an 
             existing object, you will see the phantom.
@@ -627,14 +645,14 @@ class TrashBin(CanvasDnd):
         """
         #Set default height/width if user didn't specify.
         if not kw.has_key('width'):
-            kw['width'] =150
+            kw['width'] =50
         if not kw.has_key('height'):
-            kw['height'] = 25    
+            kw['height'] = 20    
         CanvasDnd.__init__(self, Master, kw)
         #Put the text "trash" in the middle of the canvas
         X = kw['width'] / 2
         Y = kw['height'] /2
-        self.create_text(X,Y,text='TRASH')
+        self.create_text(X,Y,text='trash')
     
     def dnd_commit(self,Source,Event):
         """
@@ -695,10 +713,10 @@ class dissector_builder_area(Frame):
         #main_frame.grid(row=0)
 
         button_frame = Frame(self, bg='cyan')
-        button_frame.grid(row=0,sticky='nsew')
+        button_frame.pack(anchor='w',expand=True,fill='x')
 
         self.builder_frame = Frame(self, bg='yellow')
-        self.builder_frame.grid(row=1, sticky='nsew')
+        self.builder_frame.pack(anchor='w',expand=True,fill='x')
 
         # Window min, max, close button, and title
         title = Label(button_frame, text="Dissector Builder Area", font='System 14 bold', background='lightblue')
@@ -736,20 +754,6 @@ class dissector_builder_area(Frame):
         interior_id = canvas.create_window(0, 0, window=interior,anchor=NW)
 
 
-        # Palette min, max, close button, and title
-        '''
-        palette_title = Label(self.interior, text="Palette", font='System 14 bold', background='lightblue')
-        palette_title.grid(row=0,column=0)
-        
-        palette_minimize = Button(self.interior, text="_")
-        palette_minimize.grid(row=0,column=1)
-
-        palette_maximize = Button(self.interior, text="[ ]")
-        palette_maximize.grid(row=0,column=2)
-        
-        palette_close = Button(self.interior, text="X", command=self.palette_close_button)
-        palette_close.grid(row=0,column=3)
-        '''
         t2 = ToggledFrame(self.interior, text='Field', relief="raised", borderwidth=1)
         t2.grid(row=2,sticky='ns')
         
@@ -837,42 +841,42 @@ class dissector_builder_area(Frame):
         InitiationObjectLess = Button(construct.sub_frame,image=less)
         InitiationObjectLess.image = less
         InitiationObjectLess.grid(row=3,column=0)
-        InitiationObjectLess.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectLess.bind('<ButtonPress>',lambda event, n='less than':self.on_dnd_start(event,n))
 
         gtr = PhotoImage(file="greater.gif") 
         gtr = gtr.subsample(4,4)
         InitiationObjectGtr = Button(construct.sub_frame,image=gtr)
         InitiationObjectGtr.image = gtr
         InitiationObjectGtr.grid(row=3,column=1)
-        InitiationObjectGtr.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectGtr.bind('<ButtonPress>', lambda event, n = 'greater':self.on_dnd_start(event,n))
 
-        lessEqual = PhotoImage(file="greater.gif") 
+        lessEqual = PhotoImage(file="lessequal.gif") 
         lessEqual = lessEqual.subsample(4,4)
         InitiationObjectLessEqual = Button(construct.sub_frame,image=lessEqual)
         InitiationObjectLessEqual.image = lessEqual
         InitiationObjectLessEqual.grid(row=3,column=2)
-        InitiationObjectLessEqual.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectLessEqual.bind('<ButtonPress>', lambda event, n = 'lessequal':self.on_dnd_start(event,n))
 
         greaterEqual = PhotoImage(file="greaterequal.gif") 
         greaterEqual = greaterEqual.subsample(4,4)
         InitiationObjectGreaterEqual = Button(construct.sub_frame,image=greaterEqual)
         InitiationObjectGreaterEqual.image = greaterEqual
         InitiationObjectGreaterEqual.grid(row=4,column=0)
-        InitiationObjectGreaterEqual.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectGreaterEqual.bind('<ButtonPress>', lambda event, n = 'greaterequal':self.on_dnd_start(event,n))
 
         equal = PhotoImage(file="equal.gif") 
         equal = equal.subsample(4,4)
         InitiationObjectEqual = Button(construct.sub_frame,image=equal)
         InitiationObjectEqual.image = equal
         InitiationObjectEqual.grid(row=4,column=1)
-        InitiationObjectEqual.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectEqual.bind('<ButtonPress>', lambda event, n = 'equal':self.on_dnd_start(event,n))
 
         nand = PhotoImage(file="nand.gif") 
         nand = nand.subsample(4,4)
         InitiationObjectNand = Button(construct.sub_frame,image=nand)
         InitiationObjectNand.image = nand
         InitiationObjectNand.grid(row=4,column=2)
-        InitiationObjectNand.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectNand.bind('<ButtonPress>', lambda event, n = 'nand':self.on_dnd_start(event,n))
 
         InitiationObjectLogical = Label(construct.sub_frame,text="Logical: ")
         InitiationObjectLogical.grid(row=5)
@@ -882,33 +886,33 @@ class dissector_builder_area(Frame):
         InitiationObjectAndop = Button(construct.sub_frame,image=andop)
         InitiationObjectAndop.image = andop
         InitiationObjectAndop.grid(row=6,column=0)
-        InitiationObjectAndop.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectAndop.bind('<ButtonPress>', lambda event, n = 'and':self.on_dnd_start(event,n))
 
         orop = PhotoImage(file="or.gif") 
         orop = orop.subsample(4,4)
         InitiationObjectOrop = Button(construct.sub_frame,image=orop)
         InitiationObjectOrop.image = orop
         InitiationObjectOrop.grid(row=6,column=1)
-        InitiationObjectOrop.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectOrop.bind('<ButtonPress>', lambda event, n = 'or':self.on_dnd_start(event,n))
 
         notop = PhotoImage(file="not.gif") 
         notop = notop.subsample(4,4)
         InitiationObjectNotop = Button(construct.sub_frame,image=notop)
         InitiationObjectNotop.image = notop
         InitiationObjectNotop.grid(row=6,column=2)
-        InitiationObjectNotop.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectNotop.bind('<ButtonPress>', lambda event, n = 'not':self.on_dnd_start(event,n))
 
         oper = PhotoImage(file="oper.gif") 
         oper = oper.subsample(4,4)
         InitiationObjectOper = Button(construct.sub_frame,image=oper)
         InitiationObjectOper.image = oper
         InitiationObjectOper.grid(row=7,)
-        InitiationObjectOper.bind('<ButtonPress>',self.on_dnd_start)
+        InitiationObjectOper.bind('<ButtonPress>', lambda event, n = 'oper':self.on_dnd_start(event,n))
         
-        '''
-        Trash = TrashBin(self, relief=RAISED,bd=2)
+        
+        Trash = TrashBin(self.builder_frame, relief=RAISED,bd=2)
         Trash.pack(expand=NO)
-        '''
+        
 
         # track changes to the canvas and frame width and sync them,
         # also updating the scrollbar
@@ -939,11 +943,6 @@ class dissector_builder_area(Frame):
         vbar.config(command=TargetWidget_TargetObject.yview)
 
         TargetWidget_TargetObject.config(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
-        
-        #T = Dragged('field')
-        #T.PlaceOnCanvas(TargetWidget_TargetObject,(100,100))
-        
-        #self.master.mainloop()
 
     def on_dnd_start(self,Event,name):
         """
@@ -953,20 +952,6 @@ class dissector_builder_area(Frame):
         ThingToDrag = Dragged(name)
         #Pass the object to be dragged and the event to Tkdnd
         Tkdnd.dnd_start(ThingToDrag,Event)
-
-    def ShowObjectDicts():
-        """
-        Some demo code to let the user see what ojects we think are
-            on each of the three canvases.
-        
-        The only reason we display the content of the trash bin is to show that it
-            has no objects, even after some have been dropped on it.
-        """
-        TargetWidget_TargetObject.ShowObjectDict('UpperCanvas')
-        TargetWidget_TargetObject2.ShowObjectDict('LowerCanvas')
-        Trash.ShowObjectDict('Trash bin')
-        print '----------'
-
 
     def close_button_clicked(self,event=None):
         self.master.grid_forget()
@@ -987,20 +972,20 @@ class FieldWindow(Frame):
 
         self.fieldWindow = Frame(self, bg='lightblue')
         self.fieldWindow.pack()
-        titleFrame = Frame(self.fieldWindow,bg='lightblue')
+        self.titleFrame = Frame(self.fieldWindow,bg='lightblue')
         self.infoFrame = Frame(self.fieldWindow, bg='white')
 
-        titleFrame.grid(row=0)
+        self.titleFrame.grid(row=0)
         self.infoFrame.grid(row=1)
 
         # Window Title and Buttons
-        title = Label(titleFrame,text='Field',font='System 14 bold',bg='lightblue')
+        title = Label(self.titleFrame,text='Field',font='System 14 bold',bg='lightblue')
         title.grid(row=0,column=0,sticky='w')
         
-        titleMin = Button(titleFrame,text='_',font='System 12 bold',bg='lightblue',command=self.close_window)
+        titleMin = Button(self.titleFrame,text='_',font='System 12 bold',bg='lightblue',command=self.close_window)
         titleMin.grid(row=0,column=1,sticky='w')
 
-        titleMax = Button(titleFrame,text='[ ]',font='System 12 bold',bg='lightblue',command=self.expand_window)
+        titleMax = Button(self.titleFrame,text='[ ]',font='System 12 bold',bg='lightblue',command=self.expand_window)
         titleMax.grid(row=0,column=2,sticky='w')
 
         # Field Name Label
@@ -1134,6 +1119,114 @@ class StartFieldWindow(Frame):
     def expand_window(self):
         self.infoFrame.grid()
 
+class DissectorHandler:
+
+    def getStartNode(self, construct):
+        return construct.getStartNode()
+
+    def getEndNode(self, construct):
+        return construct.getEndNode()
+
+    def getPacketProtocol(self, Packet):
+        return construct.getStartNode()
+
+    def getReferenceList(self, referenceList):
+        return List.getInfo()
+
+    def getProtocolSpecification(self, protocol):
+        return protocol.getSpecification()
+
+    def getProtocolName(self, protocol):
+        return protocol.getname()
+
+    def getProtocolDependency(self, protocol):
+        return protocol.getDependency()
+
+    def getProtocol(self, name, s, d, packet):
+        return packet
+
+    def setProtocol(self, name, d, packet):
+        Protocol = (name, d, packet)
+
+    def getPacket(self, tree):
+        return tree.packet
+
+    def getTree(self):
+        return Tree.tree
+
+class Protocol:
+
+    specification = ""
+    def __init__(self, name, specification, dependencies):
+        self.name = name
+        Protocol.specification = specification
+        self.dependencies = dependencies
+
+    def getName(self):
+        return self.name
+
+    def getSpecification(self):
+        return self.specification
+
+    def getDescription(self):
+        return self.description
+
+    def setName(self, name):
+        self.name = name 
+
+    def setSpecification(self, spec):
+        self.specification = spec
+
+class Packet:
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+    def getName(self):
+        return self.name
+
+    def getDescription(self):
+        return self.description
+
+    def setName(self, name):
+        self.name = name
+
+    def setDescription(self, description):
+        self.description = description
+
+    def getProtocolSpecification(self):
+        return Protocol.specification
+
+    def setProtocolSpecification(self, specification):
+        Protocol.specification = specification
+
+class ProtocolDecisionTree:
+    def __init__(self, name):
+        self.name = name
+
+class ReferenceList:
+
+    ref_list_name = ""
+
+    def __init__(self, listValue, listDescription):
+        self.arrayList = []
+        l = List(listValue, listDescription)
+        self.arrayList.append(l)
+
+    def addList(self, listValue, listDescription):
+        l = List(listValue, listDescription)
+        self.arrayList.append(l)
+
+    def printList(self):
+        for l in self.arrayList:
+            print("Value: " + l.value)
+            print("Description: " + l.description)
+
+class List:
+    def __init__(self, value, description):
+        self.value = value
+        self.description = description
+        
 class EndFieldWindow(Frame):
     def __init__(self,master):
         Frame.__init__(self,master)
@@ -1197,16 +1290,15 @@ class ReferenceListWindow(Frame):
 
         self.x = 3
         
-        referenceList = Frame(self,bg='lightblue')
-        title = Frame(referenceList,bg='lightblue')
-        self.infoFrame = Frame(referenceList,bg='white')
+        self.referenceList = Frame(self,bg='lightblue')
+        title = Frame(self.referenceList,bg='lightblue')
+        self.infoFrame = Frame(self.referenceList,bg='white')
         
-        referenceList.pack()
+        self.referenceList.pack()
         title.grid(row=0)
         self.infoFrame.grid(row=2)
 
         # Window Title and Buttons
-        
         titleLabel = Label(title,text='Reference List',font='System 14 bold',bg='lightblue')
         titleLabel.grid(row=0,column=0,sticky='w')
         
@@ -1220,10 +1312,10 @@ class ReferenceListWindow(Frame):
         referenceLabel = Label(self.infoFrame, text="Reference List Name",font='System 12 bold',bg='white')
         referenceLabel.grid(row=0,column=0,sticky='nesw')
         
-        referenceEntry = Entry(self.infoFrame,bg='white',font='System 10')
-        referenceEntry.grid(row=0,column=1,sticky='we')     
+        self.referenceEntry = Entry(self.infoFrame,bg='white',font='System 10')
+        self.referenceEntry.grid(row=0,column=1,sticky='we')     
         
-         # Value Label
+        # Value Label
         valueLabel = Label(self.infoFrame, text="Value",font='System 12 bold',bg='white')
         valueLabel.grid(row=1,column=0,sticky='nesw')
 
@@ -1231,15 +1323,34 @@ class ReferenceListWindow(Frame):
         textDescription = Label(self.infoFrame, text='Text Description',font='System 12 bold',bg='white')
         textDescription.grid(row=1,column=1,sticky='nesw')    
         
-        Entry(self.infoFrame,bg='white',font='System 12').grid(row=2, column=0)        
-        Entry(self.infoFrame,bg='white',font='System 12').grid(row=2, column=1)
+        # Reference List Value and Description
+        self.value = Entry(self.infoFrame,bg='white',font='System 12')
+        self.value.grid(row=2, column=0)        
+        self.description = Entry(self.infoFrame,bg='white',font='System 12')
+        self.description.grid(row=2, column=1)
+
+        print("Reference List Object was created")
+        self.referenceList = ReferenceList('0', '0')
         
         Button(self.infoFrame, text='+', command=self.add).grid(row=10, column=1, sticky='e')
+        Button(self.infoFrame, text='Submit', command=self.getInfo).grid(row=10, column=2, sticky='e')
 
     def add(self):
-        Entry(self.infoFrame,bg='white',font='System 12').grid(row=self.x, column=0) 
-        Entry(self.infoFrame,bg='white',font='System 12').grid(row=self.x, column=1) 
+        self.value = Entry(self.infoFrame,bg='white',font='System 12')
+        self.value.grid(row=self.x, column=0) 
+        self.description = Entry(self.infoFrame,bg='white',font='System 12')
+        self.description.grid(row=self.x, column=1) 
+        #self.referenceList.addList(self.value.get(), self.description.get())
         self.x+=1
+
+    def getInfo(self):
+        #print("Value in getInfo: " + self.value.get())
+        #print("Description in getInfo: " + self.description.get())
+        self.referenceList.addList(self.value.get(), self.description.get())
+        self.referenceList.ref_list_name = self.referenceEntry.get()
+        print("Inside the getInfo Method")
+        print("Reference List Name: " + self.referenceList.ref_list_name)
+        self.referenceList.printList()
 
     def close_window(self):
         self.infoFrame.grid_forget()
@@ -1247,6 +1358,27 @@ class ReferenceListWindow(Frame):
     def expand_window(self):
         self.infoFrame.grid()
 
+    def StartMove(self, event):
+        self.x = event.x
+        self.y = event.y
+        print("Start X Position ", self.x)
+        print("Start Y Position ", self.y)
+
+    def StopMove(self, event):
+        self.x = event.x
+        self.y = event.y
+        print("End X Position ", self.x)
+        print("End Y Position ", self.y)
+
+    def OnMotion(self, event):
+        deltax = event.x - self.x
+        deltay = event.y - self.y
+        x = self.winfo_x() + deltax
+        y = self.winfo_y() + deltay
+        if (x > 0 and y > 0):
+            self.place(x=x)
+            self.place(y=y) 
+            self.update()
 
 if __name__ == "__main__":
 

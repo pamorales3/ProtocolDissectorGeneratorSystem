@@ -1,0 +1,16 @@
+
+class logicalOperator:
+    def __init__(self):
+        self.And = "&&"
+        self.Or = "||"
+        self.Not = "!"
+
+    def check(self,operator):
+        if operator == self.And:
+            print self.And
+        if operator == self.Or:
+            print self.Or
+        if operator == self.Not:
+            print self.Not
+        else:
+            print "No operator match"

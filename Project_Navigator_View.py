@@ -9,10 +9,10 @@ class Project_Navigator_View(tk.Frame):
         #self.master.resizable(True,True)
         #self.master.tk_setPalette('#ececec')
 
-        main_frame = tk.Frame(self)
-        main_frame.pack(anchor='w',expand=True,fill='x')
+        self.main_frame = tk.Frame(self)
+        self.main_frame.pack(anchor='w',expand=True,fill='x')
 
-        button_frame = tk.Frame(main_frame)
+        button_frame = tk.Frame(self.main_frame)
         button_frame.pack(padx=0,pady=0,anchor='w',expand=True,fill='x')
 
         self.title = tk.Label(button_frame, text="Project Navigator", font='System 14 bold', background='lightblue')
@@ -25,13 +25,13 @@ class Project_Navigator_View(tk.Frame):
         minimize = tk.Button(button_frame, text="_", command=self.minimize_button_clicked, bg="lightblue")
         minimize.pack(side='left')
 
-        maximize = tk.Button(button_frame, text="[ ]",bg='lightblue')
+        maximize = tk.Button(button_frame, text="[ ]",command=self.maximize_button_clicked,bg='lightblue')
         maximize.pack(side='left')
 
         close = tk.Button(button_frame, text="X", bg='lightblue',command=self.close_button_clicked)
         close.pack(side='left')
 
-        self.tree_frame = tk.Frame(main_frame)
+        self.tree_frame = tk.Frame(self.main_frame)
         self.tree_frame.pack(anchor='w',expand=True,fill='x')
 
         # Create Treeview 
@@ -85,14 +85,14 @@ class Project_Navigator_View(tk.Frame):
         print("you clicked on", self.tree.item(item,"text"))
 
     def close_button_clicked(self,event=None):
-        self.grid_forget()
+        self.master.grid_forget()
 
     def minimize_button_clicked(self,event=None):
-        self.tree_frame.grid_forget()
-
+        self.tree_frame.pack_forget()
+        
     def maximize_button_clicked(self,event=None):
-        self.tree_frame.grid()
-
+        self.tree_frame.pack(anchor='w',expand=True,fill='x')
+    
 
 if __name__ == '__main__':
     root = tk.Tk()

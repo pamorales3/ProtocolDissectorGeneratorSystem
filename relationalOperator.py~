@@ -1,0 +1,23 @@
+
+class relationalOperator:
+    def __init__(self):
+        self.lessThan = "<"
+        self.greaterThan = ">"
+        self.lessThanOrEqualTo = "<="
+        self.greaterThanOrEqualTo = ">="
+        self.equalTo = "=="
+        self.notEqualTo = "!="
+        
+    def check(self,operator):
+        if operator == self.lessThan:
+            print self.lessThan
+        if operator == self.greaterThan:
+            print self.greaterThan
+        if operator == self.lessThanOrEqualTo:
+            print self.lessThanOrEqualTo
+        if operator == self.greaterThanOrEqualTo:
+            print self.greaterThanOrEqualTo
+        if operator == self.equalTo:
+            print self.equalTo
+        if operator == self.notEqualTo: 
+            print self.notEqualTo

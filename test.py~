@@ -1,0 +1,20 @@
+from node import *
+from endNode import *
+from protocolDecisionTreeConstruct import *
+
+t = node("t")
+b = node("b")
+h = node("h")
+hi = node("hi")
+hs= node("hs")
+ha=node("ha")
+end = endNode()
+
+t.addDecisionNode(b,h)
+b.addNode(end)
+b.addDecisionNode(hs,ha)
+h.addNode(end)
+h.addNode(hi)
+test = t.createList()
+
+print test

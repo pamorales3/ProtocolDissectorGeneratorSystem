@@ -1,0 +1,7 @@
+class field:
+    def __init__(self):
+        self.name = None
+        self.description = None
+        self.mask = None
+        self.size = None
+        self.dataType = None

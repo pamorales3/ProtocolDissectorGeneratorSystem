@@ -131,9 +131,20 @@ class Main_GUI(tk.Frame):
         self.console_area = ca.ConsoleApp(btm_frame)
         self.console_area.grid(row=0,column=4,padx=1,pady=1,sticky="nsew")
 
+
+    def organize_view_variables(self):
+        OrganizeViews.project_nav = tk.IntVar(value=1)
+        OrganizeViews.dissector_building_area = tk.IntVar(value=1)
+        OrganizeViews.palette = tk.IntVar(value=1)
+        OrganizeViews.packet_stream_area = tk.IntVar(value=1)
+        OrganizeViews.dissected_stream_area = tk.IntVar(value=1)
+        OrganizeViews.raw_data_area = tk.IntVar(value=1)
+        OrganizeViews.console_area = tk.IntVar(value=1)
+
     def call_organize_views(self):
         r = tk.Toplevel()
         organizeViews = OrganizeViews(r)
+        self.organize_view_variables()
         organizeViews.mainloop()
 
     def create_project_clicked(self,event=None):
@@ -197,6 +208,14 @@ class Main_GUI(tk.Frame):
         app.mainloop()
 
 class OrganizeViews(tk.Frame):
+    project_nav = None
+    dissector_building_area = None
+    palette = None
+    packet_stream_area = None
+    dissected_stream_area = None
+    raw_data_area = None
+    console_area = None
+
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         
@@ -231,12 +250,10 @@ class OrganizeViews(tk.Frame):
         project_nav_label = tk.Label(dialog_frame, text="Project Navigation", font='System 14 bold')
         project_nav_label.grid(row=1,column=0,sticky='w', padx=(10,10), pady=(10,10))
 
-        project_nav_hide = tk.Radiobutton(dialog_frame, text="", variable=self.var_1, value=1,
-                  command=self.project_nav_clicked)
+        project_nav_hide = tk.Radiobutton(dialog_frame, text="", variable=OrganizeViews.project_nav, value=1)
         project_nav_hide.grid(row=1,column=1,sticky='w', padx=(20,10))
 
-        self.project_nav_show = tk.Radiobutton(dialog_frame, text="", variable=self.var_1, value=2,
-                  command=self.project_nav_clicked)
+        self.project_nav_show = tk.Radiobutton(dialog_frame, text="", variable=OrganizeViews.project_nav, value=2,)
         self.project_nav_show.grid(row=1,column=2,sticky='w', padx=(20,10))
         self.project_nav_show.select() # Turns on the project navigation show radio button
 
@@ -363,11 +380,12 @@ class OrganizeViews(tk.Frame):
         self.master.destroy()
 
     def project_nav_clicked(self, event=None):
-        selection = self.var_1.get()
+        selection = OrganizeViews.project_nav.get()
         if selection == 1:
-            print("Project Navigation: Hide was clicked")
+            print("Show was pressed and the project navigator was close")
+            self.master.grid()
         else:
-            print("Project Navigation: Show was clicked")
+            self.master.grid_forget()
 
     def dissector_building_clicked(self, event=None):
         selection = self.var_2.get()

@@ -1,0 +1,56 @@
+from startNode import *
+from endNode import *
+from node import *
+
+class protocolDecisionTreeConstruct:
+    def __init__(self):
+        self.startNode = startNode()
+        self.endNode = endNode()
+        self.startNode.addNewNode(self.endNode)
+    def addNewNode(self,node,name):#name of node
+        insert = startNode.searchNode(name)
+        self.insert.addNode(node)
+    def addDecisionNode(self,true,false,name):
+        insert = startNode.searchNode(name)
+        self.insert.addDecisionNode(true,false)
+    def setEndNode(self,endNode):
+        if isinstance(endNode,endNode):
+            self.endNode = endNode
+        else:
+            print "not endNode"
+    def setStartNode(self,protocolName,protocolDescription,dependentProtocolName,dependencyPattern):
+        start = startNode()
+        start.setProtocolName(protocolName)
+        start.setProtocolDescription(protocolDescription)
+        start.setDependentProtocolName(dependentProtocolName)
+        start.setDependencyPattern(dependencyPattern)
+        self.startNode = start
+
+    def createNode(self,name):
+        node = node(name)
+        return name
+    def getStartNode(self):
+        return startNode
+        
+    def getFieldInfo(self,info,description,mask,size,dataType,node):
+        if info == True:
+            return node.field.getInfo()
+        elif description == True:
+            return node.field.getDescription()
+        elif mask == True:
+            return node.field.getMask()
+        elif size == True:
+            return node.field.getSize()
+        elif dataType == True:
+            return node.field.getDataType()
+    def setFieldInfo(self,info,description,mask,size,dataType,node):
+        if info == True:
+            return node.field.setInfo()
+        elif description == True:
+            return node.field.setDescription()
+        elif mask == True:
+            return node.field.setMask()
+        elif size == True:
+            return node.field.setSize()
+        elif dataType == True:
+            return node.field.setDataType()

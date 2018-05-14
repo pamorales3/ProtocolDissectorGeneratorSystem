@@ -1,0 +1,23 @@
+from node import *
+from expression import *
+class decisionConstruct:
+    def __init__(self,true,false):
+        self.trueNode = true
+        self.falseNode = false
+        self.name = "dc"
+
+    def setTrueNode(self,node):
+        self.trueNode = node
+
+    def getTrueNode(self):
+        return self.trueNode
+
+
+    def setFalseNode(self,node):
+        self.falseNextNode = node
+        
+        
+    def getFalseNoe(self):
+        return self.falseNextNode
+
+    
