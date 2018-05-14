@@ -22,7 +22,9 @@
 
 This code demonstrates a real-world drag and drop.
 """
-
+import startNode as sn
+import field as f
+import protocolDecisionTreeConstruct as pdtc
 #Set Verbosity to control the display of information messages:
 #    2 Displays all messages
 #    1 Displays all but dnd_accept and dnd_motion messages
@@ -41,7 +43,7 @@ LeavePhantomVisible = 0
 from Tkinter import *
 import Tkdnd
 import ttk
-
+pdtc = pdtc.protocolDecisionTreeConstruct()
 # Keeps track of where the mouse cursor is 
 def MouseInWidget(Widget,Canvas,Event,Xlate=1):
     """
@@ -223,10 +225,26 @@ class Dragged:
             representing widget as you want. You should also override
             method "WidgetHide" below.    
         """
-        if self.WindowName == 'field':
-            print("Field Window was created and dropped")
+        
+        if self.WindowName == 'field1':
+            print("Field Window field1 was created and dropped")
             Result = Canvas(Parent,height=270,width=290,bg='white')
-            fieldWindow = FieldWindow(Parent)
+            fieldWindow = FieldWindow(Parent, 1)
+            Result.create_window(150,140,window=fieldWindow,anchor='center')
+        elif self.WindowName == 'field2':
+            print("Field Window field2 was created and dropped")
+            Result = Canvas(Parent,height=270,width=290,bg='white')
+            fieldWindow = FieldWindow(Parent,2)
+            Result.create_window(150,140,window=fieldWindow,anchor='center')
+        elif self.WindowName == 'field4':
+            print("Field Window field4 was created and dropped")
+            Result = Canvas(Parent,height=270,width=290,bg='white')
+            fieldWindow = FieldWindow(Parent,4)
+            Result.create_window(150,140,window=fieldWindow,anchor='center')
+        elif self.WindowName == 'field16':
+            print("Field Window field8 was created and dropped")
+            Result = Canvas(Parent,height=270,width=290,bg='white')
+            fieldWindow = FieldWindow(Parent,16)
             Result.create_window(150,140,window=fieldWindow,anchor='center')
         elif self.WindowName == 'startField':
             print("Start Field Window was created and dropped")
@@ -773,31 +791,31 @@ class dissector_builder_area(Frame):
         InitiationObjectFieldOne = Button(t2.sub_frame,image=fieldOne)
         InitiationObjectFieldOne.image = fieldOne
         InitiationObjectFieldOne.grid(row=1,column=0)
-        InitiationObjectFieldOne.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
+        InitiationObjectFieldOne.bind('<ButtonPress>',lambda event, n='field1':self.on_dnd_start(event,n))
         
         fieldTwo = PhotoImage(file="field2.gif")
         InitiationObjectFieldTwo = Button(t2.sub_frame,image=fieldTwo)
         InitiationObjectFieldTwo.image = fieldTwo
         InitiationObjectFieldTwo.grid(row=2,column=0)
-        InitiationObjectFieldTwo.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
+        InitiationObjectFieldTwo.bind('<ButtonPress>',lambda event, n='field2':self.on_dnd_start(event,n))
 
         fieldFour = PhotoImage(file="field4.gif")
         InitiationObjectFieldFour = Button(t2.sub_frame,image=fieldFour)
         InitiationObjectFieldFour.image = fieldFour
         InitiationObjectFieldFour.grid(row=3,column=0)
-        InitiationObjectFieldFour.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
+        InitiationObjectFieldFour.bind('<ButtonPress>',lambda event, n='field4':self.on_dnd_start(event,n))
 
         fieldSixteen = PhotoImage(file="field16.gif")
         InitiationObjectFieldSixteen = Button(t2.sub_frame,image=fieldSixteen)
         InitiationObjectFieldSixteen.image = fieldSixteen
         InitiationObjectFieldSixteen.grid(row=4,column=0)
-        InitiationObjectFieldSixteen.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
+        InitiationObjectFieldSixteen.bind('<ButtonPress>',lambda event, n='field16':self.on_dnd_start(event,n))
 
         fieldVar = PhotoImage(file="fieldVar.gif")
         InitiationObjectFieldVar = Button(t2.sub_frame,image=fieldVar)
         InitiationObjectFieldVar.image = fieldVar
         InitiationObjectFieldVar.grid(row=0,column=1)
-        InitiationObjectFieldVar.bind('<ButtonPress>',lambda event, n='field':self.on_dnd_start(event,n))
+        InitiationObjectFieldVar.bind('<ButtonPress>',lambda event, n='fieldVar':self.on_dnd_start(event,n))
 
         packet = PhotoImage(file="packet.gif")
         InitiationObjectPacket = Button(t2.sub_frame,image=packet)
@@ -963,7 +981,7 @@ class dissector_builder_area(Frame):
         self.builder_frame.grid_forget()
 
 class FieldWindow(Frame):
-    def __init__(self,master):
+    def __init__(self,master,size):
         Frame.__init__(self,master)
 
         REF_OPTIONS = ["Reference List 1", 'Reference List 2', 'Reference List 3']
@@ -979,7 +997,8 @@ class FieldWindow(Frame):
         self.infoFrame.grid(row=1)
 
         # Window Title and Buttons
-        title = Label(self.titleFrame,text='Field',font='System 14 bold',bg='lightblue')
+        
+        title = Label(self.titleFrame,text='Field ' + str(size),font='System 14 bold',bg='lightblue')
         title.grid(row=0,column=0,sticky='w')
         
         titleMin = Button(self.titleFrame,text='_',font='System 12 bold',bg='lightblue',command=self.close_window)
@@ -992,76 +1011,90 @@ class FieldWindow(Frame):
         name = Label(self.infoFrame,text='Name',font='System 10 bold',bg='white')
         name.grid(row=0,column=0)
         # Field Name Entry 
-        nameEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        nameEntry.grid(row=0,column=1,sticky='ew')
+        self.nameEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.nameEntry.grid(row=0,column=1,sticky='ew')
 
         # Field Abbreviation Label
         abbreviation = Label(self.infoFrame, text='Abbreviation',font='System 10 bold',bg='white')
         abbreviation.grid(row=1,column=0)
         # Field Abbreviation Entry 
-        abbreviationEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        abbreviationEntry.grid(row=1,column=1,sticky='ew',)
+        self.abbreviationEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.abbreviationEntry.grid(row=1,column=1,sticky='ew',)
 
         # Field Description Label
         description = Label(self.infoFrame, text='Description',font='System 10 bold',bg='white')
         description.grid(row=2,column=0)
         # Field Description Entry
-        descriptionEntry = Entry(self.infoFrame,font='System 10', width=30,bg='white')
-        descriptionEntry.grid(row=2,column=1)
+        self.descriptionEntry = Entry(self.infoFrame,font='System 10', width=30,bg='white')
+        self.descriptionEntry.grid(row=2,column=1)
 
         # Field Reference List Label
         referenceList = Label(self.infoFrame, text='Reference List',font='System 10 bold',bg='white')
         referenceList.grid(row=3,column=0)
         # Field Reference List Option Menu
-        ref = StringVar(self.infoFrame)
-        ref.set(REF_OPTIONS[0]) # default value
-        referenceListMenu = OptionMenu(self.infoFrame, ref, *REF_OPTIONS)
+        self.ref = StringVar(self.infoFrame)
+        self.ref.set(REF_OPTIONS[0]) # default value
+        referenceListMenu = OptionMenu(self.infoFrame, self.ref, *REF_OPTIONS)
         referenceListMenu.grid(row=3,column=1,sticky='ew')
 
         # Field Data Type Label
         dataType = Label(self.infoFrame, text='Data Type',font='System 10 bold',bg='white')
         dataType.grid(row=4,column=0)
         # Field Data Type Option Menu
-        data = StringVar(self.infoFrame)
-        data.set(DATA_TYPE_OPTIONS[0]) # default value
-        dataTypeMenu = OptionMenu(self.infoFrame, data, *DATA_TYPE_OPTIONS)
+        self.data = StringVar(self.infoFrame)
+        self.data.set(DATA_TYPE_OPTIONS[0]) # default value
+        dataTypeMenu = OptionMenu(self.infoFrame, self.data, *DATA_TYPE_OPTIONS)
         dataTypeMenu.grid(row=4,column=1,sticky='ew')
 
         # Field Base Type Label
         baseType = Label(self.infoFrame, text='Base Type',font='System 10 bold',bg='white')
         baseType.grid(row=5,column=0)
         # Field Base Type Option Menu
-        base = StringVar(self.infoFrame)
-        base.set(BASE_OPTIONS[0]) # default value
-        baseType = OptionMenu(self.infoFrame, base, *BASE_OPTIONS)
+        self.base = StringVar(self.infoFrame)
+        self.base.set(BASE_OPTIONS[0]) # default value
+        baseType = OptionMenu(self.infoFrame, self.base, *BASE_OPTIONS)
         baseType.grid(row=5,column=1,sticky='ew')
 
         # Field Mask Label
         mask = Label(self.infoFrame, text='Mask',font='System 10 bold',bg='white')
         mask.grid(row=6,column=0)
         # Field Mask Entry 
-        maskEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        maskEntry.grid(row=6,column=1)
+        self.maskEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.maskEntry.grid(row=6,column=1)
 
         # Field Value Constraint
         valueConstraint = Label(self.infoFrame, text='Value Constraint',font='System 10 bold',bg='white')
         valueConstraint.grid(row=7,column=0)
         # Field Value Constraint Entry
-        valueConstraintEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        valueConstraintEntry.grid(row=7,column=1)
+        self.valueConstraintEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.valueConstraintEntry.grid(row=7,column=1)
 
         # Field Required
         required = Label(self.infoFrame, text='Required',font='System 10 bold',bg='white')
         required.grid(row=8,column=0)
         # Field Required Checkbox
-        requiredCheckBox = Checkbutton(self.infoFrame)
-        requiredCheckBox.grid(row=8,column=1)
+        self.requiredCheckBox = Checkbutton(self.infoFrame)
+        self.requiredCheckBox.grid(row=8,column=1)
+
+        submitButton = Button(self.infoFrame, text='Submit', command=self.getInfo)
+        submitButton.grid(row=9)
 
     def close_window(self):
         self.infoFrame.grid_forget()
 
     def expand_window(self):
         self.infoFrame.grid()
+
+    def getInfo(self):
+        global pdtc
+        print('Name: ' + self.nameEntry.get())
+        print('Abbreviation: ' + self.abbreviationEntry.get())
+        print('Description: ' + self.descriptionEntry.get())
+        print('Mask: ' + self.maskEntry.get())
+        print('Base: ' + self.base.get())
+        print('Data Type: ' + self.data.get())
+        print('Name: ' + self.nameEntry.get())
+        pdtc.setFieldInfo('1', self.nameEntry.get(), self.abbreviationEntry.get(), self.descriptionEntry.get(), self.maskEntry.get(), 1, self.data.get(), self.base.get(), 'string')
 
 class StartFieldWindow(Frame):
     def __init__(self,master):
@@ -1089,35 +1122,52 @@ class StartFieldWindow(Frame):
         protocolName = Label(self.infoFrame,text='Protocol Name',font='System 10 bold',bg='white')
         protocolName.grid(row=1,column=0)
         # Start Field - Protocol Name Entry 
-        protocolNameEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        protocolNameEntry.grid(row=1,column=1,sticky='ew')
+        self.protocolNameEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.protocolNameEntry.grid(row=1,column=1,sticky='ew')
 
         # Start Field - Protocol Description Label
         protocolDescription = Label(self.infoFrame, text='Protocol Description',font='System 10 bold',bg='white')
         protocolDescription.grid(row=2,column=0)
         # Start Field - Protocol Description Entry 
-        protocolDescriptionEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        protocolDescriptionEntry.grid(row=2,column=1,sticky='ew',)
+        self.protocolDescriptionEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.protocolDescriptionEntry.grid(row=2,column=1,sticky='ew',)
 
         # Start Field - Dependent Protocol Name Label
         dependentProtocolName = Label(self.infoFrame, text='Dependent Protocol Name',font='System 10 bold',bg='white')
         dependentProtocolName.grid(row=3,column=0)
         # Start Field - Dependent Protocol Name Entry
-        dependentProtocolNameEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        dependentProtocolNameEntry.grid(row=3,column=1)
+        self.dependentProtocolNameEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.dependentProtocolNameEntry.grid(row=3,column=1)
 
         # Start Field - Dependency Pattern Label
         dependencyPattern = Label(self.infoFrame, text='Dependency Pattern',font='System 10 bold',bg='white')
         dependencyPattern.grid(row=4,column=0)
         # Start Field - Dependency Pattern Entry
-        dependencyPatternEntry = Entry(self.infoFrame,font='System 10',bg='white')
-        dependencyPatternEntry.grid(row=4,column=1)
+        self.dependencyPatternEntry = Entry(self.infoFrame,font='System 10',bg='white')
+        self.dependencyPatternEntry.grid(row=4,column=1)
+
+        # Submit Button
+        submitButton = Button(self.infoFrame, text='Submit', command=self.getSubmitInfo)
+        submitButton.grid(row=5)
 
     def close_window(self):
         self.infoFrame.grid_forget()
 
     def expand_window(self):
         self.infoFrame.grid()
+
+    def getSubmitInfo(self):
+        global pdtc
+        print('Protocol Name: ' + self.protocolNameEntry.get())
+
+        print('Protocol Description: ' + self.protocolDescriptionEntry.get())
+
+        print('Dependent Protocol Name: ' + self.dependentProtocolNameEntry.get())
+
+        print('Dependency Pattern: ' + self.dependencyPatternEntry.get())
+
+        pdtc.setStartNode(self.protocolNameEntry.get(),self.protocolDescriptionEntry.get(),
+                                    self.dependentProtocolNameEntry.get(),self.dependencyPatternEntry.get())
 
 class DissectorHandler:
 

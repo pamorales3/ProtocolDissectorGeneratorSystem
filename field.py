@@ -1,10 +1,31 @@
 class field:
     def __init__(self):
+        self.byteSize = None
         self.name = None
+        self.abrv = None
         self.description = None
         self.mask = None
         self.size = None
         self.dataType = None
+        self.baseType = None
+    
+    def setByteSize(self,byte):
+        self.byteSize = byte
+
+    def getByteSize(self):
+        return self.byteSize
+
+    def setBaseType(self,baseType):
+        self.baseType = baseType
+
+    def getBaseType(self):
+        return self.baseType
+
+    def setAbrv(self,abrv):
+        self.abrv = abrv
+
+    def getAbrv(self):
+        return self.abrv
 
     def setName(self,name):
         self.name = name

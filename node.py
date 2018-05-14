@@ -1,6 +1,7 @@
 from decisionConstruct import *
 from field import *
-
+from os import *
+import xml.etree.ElementTree as et
 class node:
     def __init__(self,name):
         self.name = name
@@ -41,6 +42,35 @@ class node:
         else:
             self.nextNode = node
 
+    def createXML(self,root,num):
+        current = self
+        next = current.nextNode
+        field = et.SubElement(root, self.field.getName(), attrib = {"id": str(num)})
+        fieldName = et.SubElement(field,"name")
+        fieldAbrv = et.SubElement(field,"abrv")
+        fieldByteSize = et.SubElement(field,"byteSize")
+        fieldDescription = et.SubElement(field,"desciption")
+        fieldMask = et.SubElement(field,"mask")
+        fieldSize = et.SubElement(field,"size")
+        fieldDataType = et.SubElement(field,"dataType")
+        fieldBaseType = et.SubElement(field,"baseType")
+        fieldName.text = self.field.getName()
+        fieldAbrv.text = self.field.getAbrv()
+        fieldByteSize = self.field.getByteSize()
+        fieldDescription = self.field.getDescription()
+        fieldMask = self.field.getMask
+        fieldSize = self.field.getSize
+        fieldDataType = self.field.getDataType
+        fieldBaseType = self.field.getBaseType
+        if next.name == "end":
+            print "end"
+        elif next.name == "dc":
+            next.trueNode.createXML(root,num+1)
+            next.falseNode.createXML(root,num+2)
+        else:
+            next.createXML(root,num+1)
+
+
     def searchNode(self,name):
         current = self
         next = current.nextNode
@@ -53,7 +83,3 @@ class node:
             return next.trueNode.searchNode(name)
         elif next != None:
             return next.searchNode(name)
-            
-            
-            
-        
